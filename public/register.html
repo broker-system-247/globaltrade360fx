@@ -13,52 +13,67 @@
             <div class="auth-header">
                 <a href="/" class="auth-logo">
                     <i class="fas fa-chart-line"></i>
-                    GlobalTrade<span class="logo-highlight">360</span>
+                    <span>GlobalTrade<span class="logo-highlight">360</span></span>
                 </a>
-                <h2>Create Account</h2>
-                <p>Join thousands of successful traders</p>
+                <h1>Create Account</h1>
+                <p class="auth-subtitle">Join thousands of successful traders</p>
             </div>
             
             <form id="registerForm" class="auth-form">
                 <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="regUsername" required placeholder="Choose a username">
+                    <label for="username">
+                        <i class="fas fa-user"></i> Username
+                    </label>
+                    <input type="text" id="username" required placeholder="Choose a username">
                 </div>
                 
                 <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="regEmail" required placeholder="Enter your email">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Email Address
+                    </label>
+                    <input type="email" id="email" required placeholder="Enter your email">
                 </div>
                 
                 <div class="form-group">
-                    <label>Password</label>
+                    <label for="phone">
+                        <i class="fas fa-phone"></i> Phone Number (Optional)
+                    </label>
+                    <input type="tel" id="phone" placeholder="Enter your phone number">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
                     <div class="password-input">
-                        <input type="password" id="regPassword" required placeholder="Create a strong password">
-                        <button type="button" class="password-toggle">
+                        <input type="password" id="password" required placeholder="Create a strong password">
+                        <button type="button" class="password-toggle" id="togglePassword">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
                     <div class="password-strength">
-                        <div class="strength-bar"></div>
-                        <span class="strength-text">Password strength: Weak</span>
+                        <div class="strength-bar" id="strengthBar"></div>
+                        <span class="strength-text" id="strengthText">Password strength: Weak</span>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label>Confirm Password</label>
-                    <input type="password" id="regConfirmPassword" required placeholder="Confirm your password">
+                    <label for="confirmPassword">
+                        <i class="fas fa-lock"></i> Confirm Password
+                    </label>
+                    <input type="password" id="confirmPassword" required placeholder="Confirm your password">
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group terms">
                     <label class="checkbox">
                         <input type="checkbox" id="terms" required>
                         <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
                     </label>
                 </div>
                 
-                <button type="submit" class="btn btn-primary btn-block">
+                <button type="submit" class="btn btn-primary btn-block btn-lg" id="registerButton">
                     <span id="registerText">Create Account</span>
-                    <div id="registerSpinner" class="spinner" style="display: none;"></div>
+                    <div class="spinner" id="registerSpinner" style="display: none;"></div>
                 </button>
                 
                 <div class="auth-divider">
@@ -70,29 +85,205 @@
                 </button>
                 
                 <div class="auth-footer">
-                    <p>Already have an account? <a href="/login">Login here</a></p>
+                    <p>Already have an account? <a href="/login" class="auth-link">Login here</a></p>
                 </div>
             </form>
             
-            <div id="registerMessage" class="message"></div>
+            <div class="auth-message" id="authMessage"></div>
         </div>
         
-        <div class="auth-info">
-            <h3>Start Your Trading Journey</h3>
-            <ul>
-                <li><i class="fas fa-rocket"></i> Get started with just $50</li>
-                <li><i class="fas fa-robot"></i> AI does all the trading for you</li>
-                <li><i class="fas fa-chart-line"></i> Average monthly returns: 8-15%</li>
-                <li><i class="fas fa-shield-alt"></i> Bank-level security</li>
-                <li><i class="fas fa-clock"></i> 24/7 customer support</li>
-            </ul>
-            <div class="bonus-box">
-                <h4><i class="fas fa-gift"></i> Welcome Bonus!</h4>
-                <p>Get 5% extra on your first deposit</p>
+        <div class="auth-sidebar">
+            <div class="sidebar-content">
+                <h2>Start Your Trading Journey Today</h2>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Get Started with $50</h3>
+                        <p>Low minimum deposit to begin trading</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>AI Does the Trading</h3>
+                        <p>Our algorithms work 24/7 for you</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>8-15% Monthly Returns</h3>
+                        <p>Average profit for our traders</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Bank-Level Security</h3>
+                        <p>Your funds and data are protected</p>
+                    </div>
+                </div>
+                
+                <div class="bonus-card">
+                    <div class="bonus-header">
+                        <i class="fas fa-gift"></i>
+                        <h3>Welcome Bonus!</h3>
+                    </div>
+                    <p>Get 5% extra on your first deposit</p>
+                    <small>Minimum deposit: $50</small>
+                </div>
+                
+                <div class="stats-card">
+                    <div class="stat">
+                        <h4>94.7%</h4>
+                        <p>Success Rate</p>
+                    </div>
+                    <div class="stat">
+                        <h4>24/7</h4>
+                        <p>Trading</p>
+                    </div>
+                    <div class="stat">
+                        <h4>12,589+</h4>
+                        <p>Traders</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     
-    <script src="app.js"></script>
+    <script>
+        // Password strength checker
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+            
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            
+            const width = (strength / 4) * 100;
+            strengthBar.style.width = width + '%';
+            
+            if (strength === 0) {
+                strengthBar.style.background = '#ef4444';
+                strengthText.textContent = 'Password strength: Very Weak';
+            } else if (strength === 1) {
+                strengthBar.style.background = '#f97316';
+                strengthText.textContent = 'Password strength: Weak';
+            } else if (strength === 2) {
+                strengthBar.style.background = '#eab308';
+                strengthText.textContent = 'Password strength: Fair';
+            } else if (strength === 3) {
+                strengthBar.style.background = '#22c55e';
+                strengthText.textContent = 'Password strength: Good';
+            } else {
+                strengthBar.style.background = '#16a34a';
+                strengthText.textContent = 'Password strength: Strong';
+            }
+        });
+        
+        // Password toggle
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+        
+        // Register form submission
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showMessage('error', 'Passwords do not match');
+                return;
+            }
+            
+            if (password.length < 8) {
+                showMessage('error', 'Password must be at least 8 characters');
+                return;
+            }
+            
+            const registerButton = document.getElementById('registerButton');
+            const registerText = document.getElementById('registerText');
+            const registerSpinner = document.getElementById('registerSpinner');
+            
+            // Show loading state
+            registerText.style.display = 'none';
+            registerSpinner.style.display = 'block';
+            registerButton.disabled = true;
+            
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password, phone })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('success', data.message);
+                    setTimeout(() => {
+                        window.location.href = data.redirect || '/login';
+                    }, 1500);
+                } else {
+                    showMessage('error', data.error || 'Registration failed');
+                }
+            } catch (error) {
+                showMessage('error', 'Network error. Please try again.');
+            } finally {
+                // Reset loading state
+                registerText.style.display = 'inline';
+                registerSpinner.style.display = 'none';
+                registerButton.disabled = false;
+            }
+        });
+        
+        // Google register
+        document.getElementById('googleRegister').addEventListener('click', function() {
+            showMessage('info', 'Google registration coming soon. Please use email registration for now.');
+        });
+        
+        function showMessage(type, text) {
+            const authMessage = document.getElementById('authMessage');
+            authMessage.textContent = text;
+            authMessage.className = `auth-message ${type}`;
+            authMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                authMessage.style.display = 'none';
+            }, 5000);
+        }
+    </script>
 </body>
 </html>
