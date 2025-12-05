@@ -6,133 +6,228 @@
     <title>GlobalTrade360 - AI-Powered Crypto Trading Platform</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="navbar animate__animated animate__fadeInDown">
         <div class="container">
             <div class="nav-brand">
-                <i class="fas fa-chart-line"></i>
-                <span class="logo-text">GlobalTrade<span class="logo-highlight">360</span></span>
+                <div class="logo">
+                    <i class="fas fa-chart-line"></i>
+                    <div>
+                        <span class="logo-main">GlobalTrade</span>
+                        <span class="logo-highlight">360</span>
+                    </div>
+                </div>
             </div>
+            
             <div class="nav-menu">
-                <a href="/" class="nav-link active">Home</a>
+                <a href="#home" class="nav-link active">Home</a>
                 <a href="#features" class="nav-link">Features</a>
                 <a href="#how-it-works" class="nav-link">How It Works</a>
-                <a href="#market" class="nav-link">Markets</a>
+                <a href="#markets" class="nav-link">Markets</a>
+                <a href="#testimonials" class="nav-link">Testimonials</a>
                 <a href="/login" class="nav-link">Login</a>
-                <a href="/register" class="btn btn-primary">Get Started</a>
+                <a href="/register" class="btn btn-primary btn-gradient">
+                    <i class="fas fa-rocket"></i> Get Started
+                </a>
             </div>
+            
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section id="home" class="hero">
         <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">Automated <span class="text-gradient">Crypto Trading</span> Powered by AI</h1>
-                <p class="hero-subtitle">Join thousands of investors using our advanced algorithms to generate consistent profits in cryptocurrency markets.</p>
+            <div class="hero-content animate__animated animate__fadeInLeft">
+                <div class="badge">
+                    <i class="fas fa-bolt"></i> AI-Powered Trading
+                </div>
+                <h1 class="hero-title">
+                    Automated <span class="text-gradient">Crypto Trading</span><br>
+                    Powered by Artificial Intelligence
+                </h1>
+                <p class="hero-subtitle">
+                    Join 12,589+ investors using our advanced AI algorithms to generate consistent profits 
+                    in cryptocurrency markets. No experience required.
+                </p>
+                
                 <div class="hero-stats">
-                    <div class="stat">
-                        <h3>$124.7M+</h3>
-                        <p>Total Volume Traded</p>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div>
+                            <h3>$124.7M+</h3>
+                            <p>Total Volume Traded</p>
+                        </div>
                     </div>
-                    <div class="stat">
-                        <h3>94.7%</h3>
-                        <p>Success Rate</p>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div>
+                            <h3>94.7%</h3>
+                            <p>Success Rate</p>
+                        </div>
                     </div>
-                    <div class="stat">
-                        <h3>24/7</h3>
-                        <p>Automated Trading</p>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div>
+                            <h3>24/7</h3>
+                            <p>Automated Trading</p>
+                        </div>
                     </div>
-                    <div class="stat">
-                        <h3>12,589+</h3>
-                        <p>Active Traders</p>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <h3>12,589+</h3>
+                            <p>Active Traders</p>
+                        </div>
                     </div>
                 </div>
-                <div class="hero-cta">
-                    <a href="/register" class="btn btn-primary btn-lg">Start Trading Now</a>
-                    <a href="#demo" class="btn btn-secondary btn-lg">Watch Demo</a>
+                
+                <div class="hero-actions">
+                    <a href="/register" class="btn btn-primary btn-lg btn-gradient">
+                        <i class="fas fa-play-circle"></i> Start Trading Now
+                    </a>
+                    <a href="#demo" class="btn btn-outline btn-lg">
+                        <i class="fas fa-play"></i> Watch Demo
+                    </a>
                 </div>
             </div>
-            <div class="hero-image">
+            
+            <div class="hero-image animate__animated animate__fadeInRight">
                 <div class="dashboard-preview">
                     <div class="preview-header">
-                        <div class="preview-title">Live Trading Dashboard</div>
-                        <div class="preview-status">
-                            <span class="status-indicator active"></span>
-                            <span>Live</span>
+                        <div class="preview-title">
+                            <i class="fas fa-circle"></i> Live Trading Dashboard
+                        </div>
+                        <div class="live-badge">
+                            <span class="pulse"></span> LIVE
                         </div>
                     </div>
                     <div class="market-ticker">
                         <div class="ticker-item">
-                            <span>BTC</span>
-                            <span class="price up">$63,427.50</span>
-                            <span class="change up">+2.34%</span>
+                            <span class="ticker-symbol">BTC</span>
+                            <span class="ticker-price">$63,427.50</span>
+                            <span class="ticker-change positive">+2.34%</span>
                         </div>
                         <div class="ticker-item">
-                            <span>ETH</span>
-                            <span class="price up">$3,472.80</span>
-                            <span class="change up">+1.56%</span>
+                            <span class="ticker-symbol">ETH</span>
+                            <span class="ticker-price">$3,472.80</span>
+                            <span class="ticker-change positive">+1.56%</span>
                         </div>
                         <div class="ticker-item">
-                            <span>SOL</span>
-                            <span class="price up">$172.45</span>
-                            <span class="change up">+3.21%</span>
+                            <span class="ticker-symbol">SOL</span>
+                            <span class="ticker-price">$172.45</span>
+                            <span class="ticker-change positive">+3.21%</span>
                         </div>
+                    </div>
+                    <div class="profit-display">
+                        <div class="profit-label">Today's Profit</div>
+                        <div class="profit-amount positive">+$1,248.50</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- Features -->
     <section id="features" class="section features">
         <div class="container">
-            <h2 class="section-title">Why Choose <span class="text-gradient">GlobalTrade360</span></h2>
+            <div class="section-header">
+                <div class="badge">Why Choose Us</div>
+                <h2 class="section-title">Advanced Trading <span class="text-gradient">Features</span></h2>
+                <p class="section-subtitle">Everything you need for successful crypto trading in one platform</p>
+            </div>
+            
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-robot"></i>
+                        <i class="fas fa-brain"></i>
                     </div>
                     <h3>AI-Powered Trading</h3>
-                    <p>Our advanced algorithms analyze market data 24/7 to execute profitable trades automatically.</p>
+                    <p>Our advanced neural networks analyze market data 24/7 to execute profitable trades automatically.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Machine Learning Algorithms</li>
+                        <li><i class="fas fa-check"></i> Real-time Market Analysis</li>
+                        <li><i class="fas fa-check"></i> Predictive Analytics</li>
+                    </ul>
                 </div>
+                
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-shield-alt"></i>
                     </div>
                     <h3>Risk-Free Trading</h3>
-                    <p>Advanced risk management systems ensure capital protection with stop-loss mechanisms.</p>
+                    <p>Advanced risk management with stop-loss, take-profit, and capital protection mechanisms.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Auto Stop-Loss</li>
+                        <li><i class="fas fa-check"></i> Portfolio Diversification</li>
+                        <li><i class="fas fa-check"></i> Capital Protection</li>
+                    </ul>
                 </div>
+                
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-bolt"></i>
                     </div>
                     <h3>Instant Execution</h3>
-                    <p>High-speed trade execution across multiple exchanges with minimal latency.</p>
+                    <p>High-speed trade execution across multiple exchanges with sub-second latency.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Multi-Exchange Access</li>
+                        <li><i class="fas fa-check"></i> Low Latency</li>
+                        <li><i class="fas fa-check"></i> High Liquidity</li>
+                    </ul>
                 </div>
+                
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-chart-pie"></i>
                     </div>
-                    <h3>Portfolio Diversification</h3>
-                    <p>Automatic allocation across multiple cryptocurrencies and trading strategies.</p>
+                    <h3>Smart Portfolio</h3>
+                    <p>Automatic allocation across 50+ cryptocurrencies with dynamic rebalancing.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Auto Diversification</li>
+                        <li><i class="fas fa-check"></i> Performance Tracking</li>
+                        <li><i class="fas fa-check"></i> Risk Analytics</li>
+                    </ul>
                 </div>
+                
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-mobile-alt"></i>
                     </div>
-                    <h3>Mobile Optimized</h3>
-                    <p>Access your dashboard and monitor trades from any device, anywhere.</p>
+                    <h3>Mobile Trading</h3>
+                    <p>Trade on the go with our mobile-optimized platform and dedicated apps.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> iOS & Android Apps</li>
+                        <li><i class="fas fa-check"></i> Push Notifications</li>
+                        <li><i class="fas fa-check"></i> Biometric Login</li>
+                    </ul>
                 </div>
+                
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-headset"></i>
                     </div>
                     <h3>24/7 Support</h3>
-                    <p>Dedicated support team available round the clock to assist you.</p>
+                    <p>Dedicated support team and AI assistant available round the clock.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Live Chat Support</li>
+                        <li><i class="fas fa-check"></i> AI Trading Assistant</li>
+                        <li><i class="fas fa-check"></i> Video Tutorials</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -141,46 +236,67 @@
     <!-- How It Works -->
     <section id="how-it-works" class="section steps">
         <div class="container">
-            <h2 class="section-title">Start Earning in <span class="text-gradient">3 Easy Steps</span></h2>
+            <div class="section-header">
+                <div class="badge">Simple Process</div>
+                <h2 class="section-title">Start Earning in <span class="text-gradient">3 Easy Steps</span></h2>
+            </div>
+            
             <div class="steps-container">
                 <div class="step">
                     <div class="step-number">1</div>
-                    <h3>Create Account</h3>
-                    <p>Register for free in under 2 minutes. No trading experience required.</p>
+                    <div class="step-content">
+                        <h3>Create Account</h3>
+                        <p>Sign up in under 2 minutes. No trading experience or technical knowledge required.</p>
+                    </div>
                 </div>
+                
                 <div class="step-arrow">
                     <i class="fas fa-arrow-right"></i>
                 </div>
+                
                 <div class="step">
                     <div class="step-number">2</div>
-                    <h3>Fund Your Account</h3>
-                    <p>Deposit using Bitcoin, Ethereum, USDT or other major cryptocurrencies.</p>
+                    <div class="step-content">
+                        <h3>Fund Your Account</h3>
+                        <p>Deposit using Bitcoin, Ethereum, USDT or credit card. Minimum deposit: $50.</p>
+                    </div>
                 </div>
+                
                 <div class="step-arrow">
                     <i class="fas fa-arrow-right"></i>
                 </div>
+                
                 <div class="step">
                     <div class="step-number">3</div>
-                    <h3>Start Trading</h3>
-                    <p>Activate AI trading and watch your portfolio grow automatically.</p>
+                    <div class="step-content">
+                        <h3>Start Trading</h3>
+                        <p>Activate AI trading and watch your portfolio grow automatically. Average returns: 8-15% monthly.</p>
+                    </div>
                 </div>
             </div>
-            <div class="text-center mt-4">
-                <a href="/register" class="btn btn-primary btn-lg">Get Started Now</a>
+            
+            <div class="text-center">
+                <a href="/register" class="btn btn-primary btn-lg btn-gradient">
+                    <i class="fas fa-user-plus"></i> Create Free Account
+                </a>
             </div>
         </div>
     </section>
 
     <!-- Market Data -->
-    <section id="market" class="section market">
+    <section id="markets" class="section market">
         <div class="container">
-            <h2 class="section-title">Live <span class="text-gradient">Market Data</span></h2>
+            <div class="section-header">
+                <div class="badge">Live Data</div>
+                <h2 class="section-title">Real-time <span class="text-gradient">Market Prices</span></h2>
+            </div>
+            
             <div class="market-container">
                 <div class="market-tabs">
                     <button class="market-tab active" data-tab="crypto">Cryptocurrencies</button>
                     <button class="market-tab" data-tab="forex">Forex</button>
-                    <button class="market-tab" data-tab="indices">Indices</button>
                 </div>
+                
                 <div class="market-content">
                     <div id="crypto-tab" class="tab-content active">
                         <div class="market-table">
@@ -189,30 +305,10 @@
                                 <div>Price</div>
                                 <div>24h Change</div>
                                 <div>Market Cap</div>
+                                <div>Action</div>
                             </div>
-                            <div class="table-row">
-                                <div><i class="fab fa-bitcoin"></i> Bitcoin (BTC)</div>
-                                <div>$63,427.50</div>
-                                <div class="change up">+2.34%</div>
-                                <div>$1.24T</div>
-                            </div>
-                            <div class="table-row">
-                                <div><i class="fab fa-ethereum"></i> Ethereum (ETH)</div>
-                                <div>$3,472.80</div>
-                                <div class="change up">+1.56%</div>
-                                <div>$416.7B</div>
-                            </div>
-                            <div class="table-row">
-                                <div><i class="fas fa-coins"></i> Binance Coin (BNB)</div>
-                                <div>$585.30</div>
-                                <div class="change down">-0.45%</div>
-                                <div>$89.5B</div>
-                            </div>
-                            <div class="table-row">
-                                <div><i class="fas fa-bolt"></i> Solana (SOL)</div>
-                                <div>$172.45</div>
-                                <div class="change up">+3.21%</div>
-                                <div>$76.3B</div>
+                            <div id="crypto-market-data">
+                                <!-- Crypto data will load here -->
                             </div>
                         </div>
                     </div>
@@ -222,31 +318,73 @@
     </section>
 
     <!-- Testimonials -->
-    <section class="section testimonials">
+    <section id="testimonials" class="section testimonials">
         <div class="container">
-            <h2 class="section-title">What Our <span class="text-gradient">Traders Say</span></h2>
+            <div class="section-header">
+                <div class="badge">Success Stories</div>
+                <h2 class="section-title">What Our <span class="text-gradient">Traders Say</span></h2>
+            </div>
+            
             <div class="testimonials-grid">
                 <div class="testimonial-card">
-                    <div class="testimonial-content">
-                        <p>"I've tried multiple trading platforms, but GlobalTrade360's AI consistently delivers profits. Made $12,500 in my first month!"</p>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
                     </div>
+                    <p class="testimonial-text">
+                        "I've tried multiple trading platforms, but GlobalTrade360's AI consistently delivers profits. 
+                        Made $12,500 in my first month alone!"
+                    </p>
                     <div class="testimonial-author">
                         <img src="https://i.pravatar.cc/150?img=1" alt="Alex Johnson">
                         <div>
                             <h4>Alex Johnson</h4>
-                            <p>Trader since 2022</p>
+                            <p>Professional Trader • $42,500+ Profit</p>
                         </div>
                     </div>
                 </div>
+                
                 <div class="testimonial-card">
-                    <div class="testimonial-content">
-                        <p>"As a beginner, I was nervous about crypto trading. This platform made it effortless. The automated system does all the work for me."</p>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
                     </div>
+                    <p class="testimonial-text">
+                        "As a beginner, I was nervous about crypto trading. This platform made it effortless. 
+                        The automated system does all the work for me."
+                    </p>
                     <div class="testimonial-author">
                         <img src="https://i.pravatar.cc/150?img=2" alt="Sarah Miller">
                         <div>
                             <h4>Sarah Miller</h4>
-                            <p>Trader since 2023</p>
+                            <p>Beginner Investor • $2,700+ Profit</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "The real-time market analysis is incredible. I've reduced losses by 70% while increasing 
+                        profits by 45% with their AI system."
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://i.pravatar.cc/150?img=3" alt="Michael Chen">
+                        <div>
+                            <h4>Michael Chen</h4>
+                            <p>Day Trader • $18,300+ Profit</p>
                         </div>
                     </div>
                 </div>
@@ -260,8 +398,12 @@
             <div class="cta-card">
                 <h2>Ready to Start Your Trading Journey?</h2>
                 <p>Join thousands of successful traders today. No experience needed.</p>
-                <a href="/register" class="btn btn-primary btn-lg">Create Free Account</a>
-                <p class="cta-note">No credit card required • Start with just $50</p>
+                <a href="/register" class="btn btn-primary btn-lg btn-gradient">
+                    <i class="fas fa-rocket"></i> Create Free Account
+                </a>
+                <p class="cta-note">
+                    <i class="fas fa-check-circle"></i> No credit card required • Start with just $50 • 24/7 Support
+                </p>
             </div>
         </div>
     </section>
@@ -273,34 +415,137 @@
                 <div class="footer-col">
                     <div class="footer-brand">
                         <i class="fas fa-chart-line"></i>
-                        <span>GlobalTrade<span class="logo-highlight">360</span></span>
+                        <div>
+                            <span>GlobalTrade</span>
+                            <span class="logo-highlight">360</span>
+                        </div>
                     </div>
-                    <p>Advanced AI-powered cryptocurrency trading platform for consistent profits.</p>
+                    <p class="footer-description">
+                        Advanced AI-powered cryptocurrency trading platform for consistent profits.
+                        Automated trading for everyone.
+                    </p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
+                
                 <div class="footer-col">
                     <h4>Platform</h4>
                     <a href="/login">Login</a>
                     <a href="/register">Register</a>
                     <a href="/dashboard">Dashboard</a>
+                    <a href="#features">Features</a>
+                    <a href="#markets">Markets</a>
                 </div>
+                
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="#">Trading Guides</a>
+                    <a href="#">Market Analysis</a>
+                    <a href="#">API Documentation</a>
+                    <a href="#">Blog</a>
+                    <a href="#">FAQ</a>
+                </div>
+                
                 <div class="footer-col">
                     <h4>Legal</h4>
                     <a href="#">Terms of Service</a>
                     <a href="#">Privacy Policy</a>
                     <a href="#">Risk Disclosure</a>
+                    <a href="#">AML Policy</a>
+                    <a href="#">Cookie Policy</a>
                 </div>
+                
                 <div class="footer-col">
                     <h4>Contact</h4>
                     <p><i class="fas fa-envelope"></i> support@globaltrade360.com</p>
                     <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Global Headquarters</p>
                 </div>
             </div>
+            
             <div class="footer-bottom">
                 <p>© 2024 GlobalTrade360. All rights reserved. This is a demonstration platform for educational purposes only.</p>
+                <p>Cryptocurrency trading involves substantial risk of loss and is not suitable for every investor.</p>
             </div>
         </div>
     </footer>
 
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <script src="app.js"></script>
+    <script>
+        // Load market data
+        async function loadMarketData() {
+            try {
+                const response = await fetch('/api/market');
+                const data = await response.json();
+                
+                const container = document.getElementById('crypto-market-data');
+                container.innerHTML = '';
+                
+                Object.entries(data.crypto).forEach(([pair, info]) => {
+                    const row = document.createElement('div');
+                    row.className = 'table-row';
+                    row.innerHTML = `
+                        <div>
+                            <i class="fab fa-${info.symbol.toLowerCase()}"></i>
+                            <span>${info.symbol}/USD</span>
+                        </div>
+                        <div>$${info.price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                        <div class="${info.change >= 0 ? 'positive' : 'negative'}">
+                            ${info.change >= 0 ? '+' : ''}${info.change.toFixed(2)}%
+                        </div>
+                        <div>${info.volume}</div>
+                        <div>
+                            <button class="btn btn-sm btn-primary">Trade</button>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Failed to load market data:', error);
+            }
+        }
+        
+        // Load testimonials
+        async function loadTestimonials() {
+            try {
+                const response = await fetch('/api/testimonials');
+                const data = await response.json();
+                console.log('Testimonials loaded:', data);
+            } catch (error) {
+                console.error('Failed to load testimonials:', error);
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMarketData();
+            loadTestimonials();
+            
+            // Update market data every 30 seconds
+            setInterval(loadMarketData, 30000);
+            
+            // Mobile menu
+            document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+                document.querySelector('.nav-menu').classList.toggle('active');
+            });
+            
+            // Smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
