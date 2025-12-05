@@ -40,23 +40,27 @@
                 <i class="fas fa-users"></i>
                 <span>Users</span>
             </a>
+            <a href="#wallets" class="nav-item" data-section="wallets">
+                <i class="fas fa-wallet"></i>
+                <span>Wallets</span>
+            </a>
             <a href="#deposits" class="nav-item" data-section="deposits">
                 <i class="fas fa-money-bill-wave"></i>
                 <span>Deposits</span>
             </a>
-            <a href="#withdrawals" class="nav-item" data-section="withdrawals">
-                <i class="fas fa-credit-card"></i>
-                <span>Withdrawals</span>
+            <a href="#messages" class="nav-item" data-section="messages">
+                <i class="fas fa-envelope"></i>
+                <span>Messages</span>
             </a>
-            <a href="#trades" class="nav-item" data-section="trades">
-                <i class="fas fa-exchange-alt"></i>
-                <span>Trades</span>
+            <a href="#ai-chats" class="nav-item" data-section="ai-chats">
+                <i class="fas fa-robot"></i>
+                <span>AI Chats</span>
             </a>
             <a href="#settings" class="nav-item" data-section="settings">
                 <i class="fas fa-cog"></i>
                 <span>Settings</span>
             </a>
-            <a href="/logout" class="nav-item logout">
+            <a href="#" class="nav-item logout" onclick="logout()">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
             </a>
@@ -67,9 +71,9 @@
                 <span class="status-dot active"></span>
                 <span>System Online</span>
             </div>
-            <button class="btn btn-sm btn-secondary" id="refreshData">
-                <i class="fas fa-sync-alt"></i> Refresh
-            </button>
+            <div class="server-time" id="serverTime">
+                Loading...
+            </div>
         </div>
     </div>
     
@@ -80,22 +84,32 @@
             <div class="topbar-left">
                 <h2 id="adminPageTitle">Admin Dashboard</h2>
                 <div class="admin-actions">
-                    <button class="btn btn-sm btn-primary" id="addUserBtn">
-                        <i class="fas fa-user-plus"></i> Add User
+                    <button class="btn btn-sm btn-primary" onclick="refreshData()">
+                        <i class="fas fa-sync-alt"></i> Refresh
                     </button>
-                    <button class="btn btn-sm btn-secondary" id="exportData">
+                    <button class="btn btn-sm btn-secondary" onclick="exportData()">
                         <i class="fas fa-download"></i> Export
                     </button>
                 </div>
             </div>
             <div class="topbar-right">
                 <div class="admin-stats">
-                    <span>Users: <strong id="totalUsers">0</strong></span>
-                    <span>Deposits: $<strong id="totalDeposits">0</strong></span>
-                    <span>Profit: $<strong id="platformProfit">0</strong></span>
+                    <span class="stat-item">
+                        <i class="fas fa-users"></i>
+                        Users: <strong id="totalUsersStat">0</strong>
+                    </span>
+                    <span class="stat-item">
+                        <i class="fas fa-money-bill"></i>
+                        Deposits: $<strong id="totalDepositsStat">0</strong>
+                    </span>
+                    <span class="stat-item">
+                        <i class="fas fa-chart-line"></i>
+                        Profit: $<strong id="platformProfitStat">0</strong>
+                    </span>
                 </div>
-                <div class="admin-time" id="currentTime">
-                    Loading...
+                <div class="admin-time">
+                    <i class="fas fa-clock"></i>
+                    <span id="currentTime">Loading...</span>
                 </div>
             </div>
         </div>
@@ -104,35 +118,54 @@
         <div class="admin-dashboard">
             <!-- Stats Overview -->
             <div class="admin-stats-grid" id="adminStats">
-                <!-- Stats will load here -->
+                <!-- Stats load here -->
             </div>
             
             <!-- Content Sections -->
             <div class="admin-sections">
                 <!-- Dashboard Section -->
                 <div class="admin-section active" id="dashboardSection">
-                    <h3>Platform Overview</h3>
-                    <div class="overview-cards">
+                    <div class="section-header">
+                        <h3>Platform Overview</h3>
+                        <div class="section-actions">
+                            <select id="timeRange" onchange="loadDashboardData()">
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month" selected>This Month</option>
+                                <option value="all">All Time</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="overview-grid">
                         <div class="overview-card">
-                            <h4>Recent Activity</h4>
-                            <div id="recentActivity">
-                                <!-- Activity will load here -->
+                            <h4><i class="fas fa-chart-line"></i> Platform Growth</h4>
+                            <div class="chart-placeholder">
+                                <canvas id="growthChart"></canvas>
                             </div>
                         </div>
+                        
                         <div class="overview-card">
-                            <h4>Quick Actions</h4>
+                            <h4><i class="fas fa-bell"></i> Recent Activity</h4>
+                            <div class="activity-feed" id="recentActivity">
+                                <!-- Activity loads here -->
+                            </div>
+                        </div>
+                        
+                        <div class="overview-card">
+                            <h4><i class="fas fa-bolt"></i> Quick Actions</h4>
                             <div class="quick-actions">
-                                <button class="btn btn-block" id="manageUsersBtn">
+                                <button class="btn btn-block" onclick="showSection('users')">
                                     <i class="fas fa-users-cog"></i> Manage Users
                                 </button>
-                                <button class="btn btn-block" id="viewDepositsBtn">
-                                    <i class="fas fa-money-check-alt"></i> Review Deposits
+                                <button class="btn btn-block" onclick="showAddFundsModal()">
+                                    <i class="fas fa-plus-circle"></i> Add User Funds
                                 </button>
-                                <button class="btn btn-block" id="approveWithdrawalsBtn">
-                                    <i class="fas fa-check-circle"></i> Approve Withdrawals
+                                <button class="btn btn-block" onclick="showSection('wallets')">
+                                    <i class="fas fa-wallet"></i> Update Wallets
                                 </button>
-                                <button class="btn btn-block" id="systemSettingsBtn">
-                                    <i class="fas fa-sliders-h"></i> System Settings
+                                <button class="btn btn-block" onclick="showSection('messages')">
+                                    <i class="fas fa-envelope"></i> View Messages
                                 </button>
                             </div>
                         </div>
@@ -142,11 +175,14 @@
                 <!-- Users Section -->
                 <div class="admin-section" id="usersSection">
                     <div class="section-header">
-                        <h3>User Management</h3>
+                        <h3><i class="fas fa-users"></i> User Management</h3>
                         <div class="section-actions">
-                            <input type="text" id="searchUsers" placeholder="Search users...">
-                            <button class="btn btn-primary" id="addFundsBtn">
-                                <i class="fas fa-plus-circle"></i> Add Funds
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="userSearch" placeholder="Search users..." onkeyup="filterUsers()">
+                            </div>
+                            <button class="btn btn-primary" onclick="exportUsers()">
+                                <i class="fas fa-file-export"></i> Export
                             </button>
                         </div>
                     </div>
@@ -165,82 +201,132 @@
                                 </tr>
                             </thead>
                             <tbody id="usersTableBody">
-                                <!-- Users will load here -->
+                                <!-- Users load here -->
                             </tbody>
                         </table>
                     </div>
-                </div>
-                
-                <!-- User Details Modal -->
-                <div class="modal" id="userDetailsModal">
-                    <div class="modal-content wide">
-                        <div class="modal-header">
-                            <h3>User Details</h3>
-                            <button class="modal-close">&times;</button>
-                        </div>
-                        <div class="modal-body" id="userDetailsContent">
-                            <!-- User details will load here -->
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Add Funds Modal -->
-                <div class="modal" id="addFundsModal">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h3>Add Funds to User</h3>
-                            <button class="modal-close">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="addFundsForm">
-                                <div class="form-group">
-                                    <label>User Email</label>
-                                    <input type="email" id="fundsUserEmail" required readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label>Amount (USD)</label>
-                                    <input type="number" id="fundsAmount" required min="1" step="0.01">
-                                </div>
-                                <div class="form-group">
-                                    <label>Notes</label>
-                                    <textarea id="fundsNotes" rows="3" placeholder="Reason for adding funds..."></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block">
-                                    Add Funds
-                                </button>
-                            </form>
+                    
+                    <div class="table-footer">
+                        <div class="pagination">
+                            <button class="btn btn-sm" onclick="prevPage()">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span id="pageInfo">Page 1 of 1</span>
+                            <button class="btn btn-sm" onclick="nextPage()">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Freeze Funds Modal -->
-                <div class="modal" id="freezeFundsModal">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h3>Manage User Funds</h3>
-                            <button class="modal-close">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="freezeFundsForm">
-                                <div class="form-group">
-                                    <label>User Email</label>
-                                    <input type="email" id="freezeUserEmail" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label>Action</label>
-                                    <select id="freezeAction">
-                                        <option value="freeze">Freeze Funds (Prevent withdrawals)</option>
-                                        <option value="unfreeze">Unfreeze Funds (Allow withdrawals)</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Reason</label>
-                                    <textarea id="freezeReason" rows="3" required></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-warning btn-block">
-                                    Execute Action
+                <!-- Wallets Section -->
+                <div class="admin-section" id="walletsSection">
+                    <div class="section-header">
+                        <h3><i class="fas fa-wallet"></i> Wallet Management</h3>
+                        <p class="section-subtitle">Update deposit addresses for users</p>
+                    </div>
+                    
+                    <div class="wallets-grid">
+                        <div class="wallet-card">
+                            <div class="wallet-header">
+                                <i class="fab fa-bitcoin"></i>
+                                <h4>Bitcoin (BTC)</h4>
+                            </div>
+                            <div class="wallet-address">
+                                <code id="adminBtcAddress">Loading...</code>
+                            </div>
+                            <div class="wallet-actions">
+                                <button class="btn btn-sm btn-primary" onclick="editWallet('BTC')">
+                                    <i class="fas fa-edit"></i> Edit
                                 </button>
-                            </form>
+                                <button class="btn btn-sm btn-secondary" onclick="copyWallet('BTC')">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="wallet-card">
+                            <div class="wallet-header">
+                                <i class="fab fa-ethereum"></i>
+                                <h4>Ethereum (ETH)</h4>
+                            </div>
+                            <div class="wallet-address">
+                                <code id="adminEthAddress">Loading...</code>
+                            </div>
+                            <div class="wallet-actions">
+                                <button class="btn btn-sm btn-primary" onclick="editWallet('ETH')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="copyWallet('ETH')">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="wallet-card">
+                            <div class="wallet-header">
+                                <i class="fas fa-coins"></i>
+                                <h4>USDT (TRC20)</h4>
+                            </div>
+                            <div class="wallet-address">
+                                <code id="adminUsdtAddress">Loading...</code>
+                            </div>
+                            <div class="wallet-actions">
+                                <button class="btn btn-sm btn-primary" onclick="editWallet('USDT_TRC20')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="copyWallet('USDT_TRC20')">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="wallet-card">
+                            <div class="wallet-header">
+                                <i class="fab fa-btc"></i>
+                                <h4>BNB (BEP20)</h4>
+                            </div>
+                            <div class="wallet-address">
+                                <code id="adminBnbAddress">Loading...</code>
+                            </div>
+                            <div class="wallet-actions">
+                                <button class="btn btn-sm btn-primary" onclick="editWallet('BNB')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="copyWallet('BNB')">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Messages Section -->
+                <div class="admin-section" id="messagesSection">
+                    <div class="section-header">
+                        <h3><i class="fas fa-envelope"></i> Support Messages</h3>
+                        <div class="message-filters">
+                            <button class="btn btn-sm active" data-filter="all">All</button>
+                            <button class="btn btn-sm" data-filter="unread">Unread</button>
+                            <button class="btn btn-sm" data-filter="replied">Replied</button>
+                        </div>
+                    </div>
+                    
+                    <div class="messages-list" id="messagesList">
+                        <!-- Messages load here -->
+                    </div>
+                </div>
+                
+                <!-- AI Chats Section -->
+                <div class="admin-section" id="aiChatsSection">
+                    <div class="section-header">
+                        <h3><i class="fas fa-robot"></i> AI Chat Monitor</h3>
+                        <p class="section-subtitle">Monitor user interactions with AI assistant</p>
+                    </div>
+                    
+                    <div class="chats-container">
+                        <div class="chats-list" id="chatsList">
+                            <!-- AI chats load here -->
                         </div>
                     </div>
                 </div>
@@ -248,6 +334,868 @@
         </div>
     </div>
     
-    <script src="app.js"></script>
+    <!-- Modals -->
+    <div class="modal" id="editWalletModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Wallet Address</h3>
+                <button class="modal-close" onclick="closeModal('editWalletModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editWalletForm">
+                    <div class="form-group">
+                        <label id="walletCurrencyLabel">Currency</label>
+                        <input type="text" id="walletCurrency" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>New Address</label>
+                        <textarea id="newWalletAddress" rows="4" placeholder="Enter new wallet address" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Update Address
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="addFundsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Funds to User</h3>
+                <button class="modal-close" onclick="closeModal('addFundsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addFundsForm">
+                    <div class="form-group">
+                        <label>Select User</label>
+                        <select id="fundsUserId" required>
+                            <option value="">Select user...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount (USD)</label>
+                        <input type="number" id="fundsAmount" required min="1" step="0.01" placeholder="Enter amount">
+                    </div>
+                    <div class="form-group">
+                        <label>Reason (Optional)</label>
+                        <textarea id="fundsReason" rows="3" placeholder="Reason for adding funds..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Add Funds
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="messageModal">
+        <div class="modal-content wide">
+            <div class="modal-header">
+                <h3>Message Details</h3>
+                <button class="modal-close" onclick="closeModal('messageModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="message-details" id="messageDetails">
+                    <!-- Message details load here -->
+                </div>
+                <div class="message-reply">
+                    <h4>Reply to User</h4>
+                    <textarea id="adminReply" rows="4" placeholder="Type your reply here..."></textarea>
+                    <button class="btn btn-primary" onclick="sendReply()">
+                        <i class="fas fa-paper-plane"></i> Send Reply
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="userDetailsModal">
+        <div class="modal-content wide">
+            <div class="modal-header">
+                <h3>User Details</h3>
+                <button class="modal-close" onclick="closeModal('userDetailsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="user-details" id="userDetailsContent">
+                    <!-- User details load here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let currentEditingWallet = '';
+        let currentMessageId = '';
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let allUsers = [];
+        
+        // Load admin dashboard
+        async function loadAdminDashboard() {
+            try {
+                // Check admin session
+                const sessionRes = await fetch('/api/session');
+                const sessionData = await sessionRes.json();
+                
+                if (!sessionData.authenticated || !sessionData.isAdmin) {
+                    window.location.href = '/login?admin=true';
+                    return;
+                }
+                
+                // Load dashboard data
+                await loadDashboardData();
+                
+                // Load wallet addresses
+                await loadWalletAddresses();
+                
+                // Update time
+                updateTime();
+                setInterval(updateTime, 1000);
+                
+                // Set up navigation
+                setupNavigation();
+                
+            } catch (error) {
+                console.error('Failed to load admin dashboard:', error);
+            }
+        }
+        
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/api/admin/dashboard');
+                const data = await response.json();
+                
+                if (data.stats) {
+                    // Update stats
+                    document.getElementById('totalUsersStat').textContent = data.stats.totalUsers;
+                    document.getElementById('totalDepositsStat').textContent = data.stats.totalDeposits.toFixed(0);
+                    document.getElementById('platformProfitStat').textContent = data.stats.platformProfit.toFixed(0);
+                    
+                    // Update stats grid
+                    const statsGrid = document.getElementById('adminStats');
+                    statsGrid.innerHTML = `
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>${data.stats.totalUsers}</h3>
+                                <p>Total Users</p>
+                                <div class="stat-change positive">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+${data.stats.activeUsers} active</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>$${data.stats.totalDeposits.toFixed(0)}</h3>
+                                <p>Total Deposits</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>$${data.stats.platformProfit.toFixed(0)}</h3>
+                                <p>Platform Profit</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>${data.stats.pendingWithdrawals || 0}</h3>
+                                <p>Pending Withdrawals</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Update recent activity
+                    const activityContainer = document.getElementById('recentActivity');
+                    let activityHtml = '';
+                    
+                    if (data.recentUsers && data.recentUsers.length > 0) {
+                        data.recentUsers.forEach(user => {
+                            activityHtml += `
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>New user registered: <strong>${user.email}</strong></p>
+                                        <small>${new Date(user.registrationDate).toLocaleDateString()}</small>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                    
+                    if (data.recentDeposits && data.recentDeposits.length > 0) {
+                        data.recentDeposits.slice(0, 3).forEach(deposit => {
+                            activityHtml += `
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-arrow-down"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>Deposit: <strong>$${deposit.amount}</strong> from ${deposit.userEmail || 'user'}</p>
+                                        <small>${new Date(deposit.timestamp).toLocaleTimeString()}</small>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                    
+                    if (data.recentMessages && data.recentMessages.length > 0) {
+                        data.recentMessages.slice(0, 2).forEach(message => {
+                            activityHtml += `
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>New message from: <strong>${message.userEmail}</strong></p>
+                                        <small>${message.subject}</small>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                    
+                    activityContainer.innerHTML = activityHtml || '<p class="empty-state">No recent activity</p>';
+                    
+                    // Load users for dropdown
+                    await loadUsers();
+                    
+                    // Load messages
+                    await loadMessages();
+                    
+                    // Load AI chats
+                    await loadAIChats();
+                }
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+            }
+        }
+        
+        async function loadWalletAddresses() {
+            try {
+                const response = await fetch('/api/wallet-addresses');
+                const addresses = await response.json();
+                
+                document.getElementById('adminBtcAddress').textContent = addresses.BTC || 'Not set';
+                document.getElementById('adminEthAddress').textContent = addresses.ETH || 'Not set';
+                document.getElementById('adminUsdtAddress').textContent = addresses.USDT_TRC20 || 'Not set';
+                document.getElementById('adminBnbAddress').textContent = addresses.BNB || 'Not set';
+            } catch (error) {
+                console.error('Failed to load wallet addresses:', error);
+            }
+        }
+        
+        async function loadUsers() {
+            try {
+                const response = await fetch('/api/admin/users');
+                const data = await response.json();
+                
+                allUsers = data.users || [];
+                renderUsersTable();
+                populateUsersDropdown();
+            } catch (error) {
+                console.error('Failed to load users:', error);
+            }
+        }
+        
+        function renderUsersTable() {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageUsers = allUsers.slice(startIndex, endIndex);
+            
+            const tableBody = document.getElementById('usersTableBody');
+            tableBody.innerHTML = '';
+            
+            pageUsers.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.id.substring(0, 8)}...</td>
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td>$${user.balance.toFixed(2)}</td>
+                    <td class="${user.totalProfit >= 0 ? 'positive' : 'negative'}">
+                        $${user.totalProfit.toFixed(2)}
+                    </td>
+                    <td>
+                        <span class="status-badge ${user.status === 'active' ? 'success' : 'warning'}">
+                            ${user.status}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-primary" onclick="viewUser('${user.id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="addFundsToUser('${user.id}', '${user.email}')">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="toggleUserStatus('${user.id}', '${user.status}')">
+                                <i class="fas ${user.status === 'active' ? 'fa-pause' : 'fa-play'}"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            // Update pagination info
+            const totalPages = Math.ceil(allUsers.length / itemsPerPage);
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+        }
+        
+        function populateUsersDropdown() {
+            const select = document.getElementById('fundsUserId');
+            select.innerHTML = '<option value="">Select user...</option>';
+            
+            allUsers.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = `${user.username} (${user.email}) - $${user.balance.toFixed(2)}`;
+                select.appendChild(option);
+            });
+        }
+        
+        async function loadMessages() {
+            try {
+                const response = await fetch('/api/admin/messages');
+                const data = await response.json();
+                
+                const messagesList = document.getElementById('messagesList');
+                messagesList.innerHTML = '';
+                
+                if (data.messages && data.messages.length > 0) {
+                    data.messages.forEach(message => {
+                        const messageItem = document.createElement('div');
+                        messageItem.className = 'message-item';
+                        messageItem.innerHTML = `
+                            <div class="message-header">
+                                <div class="message-sender">
+                                    <strong>${message.userEmail}</strong>
+                                    <span class="message-subject">${message.subject}</span>
+                                </div>
+                                <div class="message-meta">
+                                    <span class="message-time">${new Date(message.timestamp).toLocaleString()}</span>
+                                    <span class="status-badge ${message.status === 'unread' ? 'warning' : 'success'}">
+                                        ${message.status}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="message-preview">
+                                ${message.message.substring(0, 100)}...
+                            </div>
+                            <div class="message-actions">
+                                <button class="btn btn-sm btn-primary" onclick="viewMessage('${message.id}')">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                                ${message.status === 'unread' ? `
+                                    <button class="btn btn-sm btn-success" onclick="markAsRead('${message.id}')">
+                                        <i class="fas fa-check"></i> Mark Read
+                                    </button>
+                                ` : ''}
+                            </div>
+                        `;
+                        messagesList.appendChild(messageItem);
+                    });
+                } else {
+                    messagesList.innerHTML = '<p class="empty-state">No messages yet</p>';
+                }
+            } catch (error) {
+                console.error('Failed to load messages:', error);
+            }
+        }
+        
+        async function loadAIChats() {
+            try {
+                const response = await fetch('/api/admin/chats');
+                const data = await response.json();
+                
+                const chatsList = document.getElementById('chatsList');
+                chatsList.innerHTML = '';
+                
+                if (data.chats && data.chats.length > 0) {
+                    data.chats.forEach(chat => {
+                        const chatItem = document.createElement('div');
+                        chatItem.className = 'chat-item';
+                        chatItem.innerHTML = `
+                            <div class="chat-header">
+                                <strong>${chat.userEmail || 'Unknown User'}</strong>
+                                <span class="chat-time">${new Date(chat.timestamp).toLocaleString()}</span>
+                            </div>
+                            <div class="chat-question">
+                                <strong>Q:</strong> ${chat.message.substring(0, 80)}...
+                            </div>
+                            <div class="chat-answer">
+                                <strong>A:</strong> ${chat.response.substring(0, 80)}...
+                            </div>
+                            <button class="btn btn-sm btn-outline" onclick="viewChat('${chat.id}')">
+                                View Full Chat
+                            </button>
+                        `;
+                        chatsList.appendChild(chatItem);
+                    });
+                } else {
+                    chatsList.innerHTML = '<p class="empty-state">No AI chats yet</p>';
+                }
+            } catch (error) {
+                console.error('Failed to load AI chats:', error);
+            }
+        }
+        
+        function setupNavigation() {
+            document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    if (this.classList.contains('logout')) return;
+                    
+                    // Remove active class from all items
+                    document.querySelectorAll('.sidebar-nav .nav-item').forEach(i => {
+                        i.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Show corresponding section
+                    const section = this.getAttribute('data-section');
+                    showSection(section);
+                });
+            });
+        }
+        
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.admin-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(section + 'Section');
+            if (targetSection) {
+                targetSection.classList.add('active');
+                document.getElementById('adminPageTitle').textContent = 
+                    section.charAt(0).toUpperCase() + section.slice(1);
+                
+                // Load section data if needed
+                if (section === 'users') {
+                    loadUsers();
+                } else if (section === 'messages') {
+                    loadMessages();
+                } else if (section === 'ai-chats') {
+                    loadAIChats();
+                }
+            }
+        }
+        
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString();
+            document.getElementById('serverTime').textContent = now.toLocaleTimeString();
+        }
+        
+        function editWallet(currency) {
+            currentEditingWallet = currency;
+            document.getElementById('walletCurrency').value = currency;
+            document.getElementById('walletCurrencyLabel').textContent = `Currency: ${currency}`;
+            
+            // Get current address
+            const addressElement = document.getElementById(`admin${currency.replace('_', '')}Address`);
+            document.getElementById('newWalletAddress').value = addressElement.textContent;
+            
+            document.getElementById('editWalletModal').style.display = 'flex';
+        }
+        
+        function copyWallet(currency) {
+            const addressElement = document.getElementById(`admin${currency.replace('_', '')}Address`);
+            const address = addressElement.textContent;
+            
+            navigator.clipboard.writeText(address).then(() => {
+                alert(`${currency} address copied to clipboard!`);
+            });
+        }
+        
+        document.getElementById('editWalletForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const newAddress = document.getElementById('newWalletAddress').value;
+            
+            if (!newAddress) {
+                alert('Please enter a valid address');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/admin/wallet/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        currency: currentEditingWallet, 
+                        address: newAddress 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Wallet address updated successfully!');
+                    closeModal('editWalletModal');
+                    loadWalletAddresses();
+                } else {
+                    alert('Failed to update wallet: ' + data.error);
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+            }
+        });
+        
+        function showAddFundsModal() {
+            document.getElementById('addFundsModal').style.display = 'flex';
+        }
+        
+        document.getElementById('addFundsForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const userId = document.getElementById('fundsUserId').value;
+            const amount = document.getElementById('fundsAmount').value;
+            const reason = document.getElementById('fundsReason').value;
+            
+            if (!userId || !amount) {
+                alert('Please select a user and enter an amount');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/admin/user/add-funds', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, amount, reason })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(`Added $${amount} to user successfully!`);
+                    closeModal('addFundsModal');
+                    loadDashboardData(); // Refresh data
+                } else {
+                    alert('Failed to add funds: ' + data.error);
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+            }
+        });
+        
+        function addFundsToUser(userId, userEmail) {
+            const select = document.getElementById('fundsUserId');
+            for (let i = 0; i < select.options.length; i++) {
+                if (select.options[i].value === userId) {
+                    select.selectedIndex = i;
+                    break;
+                }
+            }
+            showAddFundsModal();
+        }
+        
+        async function viewUser(userId) {
+            try {
+                // Find user in allUsers array
+                const user = allUsers.find(u => u.id === userId);
+                
+                if (user) {
+                    const detailsContent = document.getElementById('userDetailsContent');
+                    detailsContent.innerHTML = `
+                        <div class="user-profile">
+                            <div class="profile-header">
+                                <div class="profile-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="profile-info">
+                                    <h4>${user.username}</h4>
+                                    <p>${user.email}</p>
+                                    <span class="status-badge ${user.status === 'active' ? 'success' : 'warning'}">
+                                        ${user.status}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="profile-details">
+                                <div class="detail-group">
+                                    <h5>Account Information</h5>
+                                    <p><strong>ID:</strong> ${user.id}</p>
+                                    <p><strong>Phone:</strong> ${user.phone || 'Not provided'}</p>
+                                    <p><strong>Registered:</strong> ${new Date(user.registrationDate).toLocaleString()}</p>
+                                    <p><strong>Last Login:</strong> ${user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Never'}</p>
+                                </div>
+                                
+                                <div class="detail-group">
+                                    <h5>Financial Information</h5>
+                                    <p><strong>Balance:</strong> $${user.balance.toFixed(2)}</p>
+                                    <p><strong>Total Profit:</strong> $${user.totalProfit.toFixed(2)}</p>
+                                    <p><strong>Total Trades:</strong> ${user.totalTrades || 0}</p>
+                                </div>
+                                
+                                <div class="detail-group">
+                                    <h5>Quick Actions</h5>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-primary" onclick="addFundsToUser('${user.id}', '${user.email}')">
+                                            <i class="fas fa-plus"></i> Add Funds
+                                        </button>
+                                        <button class="btn btn-warning" onclick="toggleUserStatus('${user.id}', '${user.status}')">
+                                            <i class="fas ${user.status === 'active' ? 'fa-pause' : 'fa-play'}"></i>
+                                            ${user.status === 'active' ? 'Deactivate' : 'Activate'}
+                                        </button>
+                                        <button class="btn btn-danger" onclick="deleteUser('${user.id}')">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.getElementById('userDetailsModal').style.display = 'flex';
+                }
+            } catch (error) {
+                console.error('Failed to load user details:', error);
+            }
+        }
+        
+        async function toggleUserStatus(userId, currentStatus) {
+            const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+            const confirmMessage = `Are you sure you want to ${newStatus === 'active' ? 'activate' : 'deactivate'} this user?`;
+            
+            if (confirm(confirmMessage)) {
+                try {
+                    // Note: This endpoint needs to be implemented in server.js
+                    const response = await fetch('/api/admin/user/status', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ userId, status: newStatus })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        alert(`User ${newStatus === 'active' ? 'activated' : 'deactivated'} successfully!`);
+                        loadUsers(); // Refresh user list
+                    } else {
+                        alert('Failed to update user status: ' + data.error);
+                    }
+                } catch (error) {
+                    alert('Network error. Please try again.');
+                }
+            }
+        }
+        
+        async function viewMessage(messageId) {
+            try {
+                const response = await fetch('/api/admin/messages');
+                const data = await response.json();
+                
+                const message = data.messages?.find(m => m.id === messageId);
+                
+                if (message) {
+                    currentMessageId = messageId;
+                    
+                    const detailsContent = document.getElementById('messageDetails');
+                    detailsContent.innerHTML = `
+                        <div class="message-full">
+                            <div class="message-header-full">
+                                <div>
+                                    <h4>${message.subject}</h4>
+                                    <p>From: <strong>${message.userEmail}</strong></p>
+                                </div>
+                                <div class="message-meta-full">
+                                    <p>Sent: ${new Date(message.timestamp).toLocaleString()}</p>
+                                    <p>Status: <span class="status-badge ${message.status === 'unread' ? 'warning' : 'success'}">${message.status}</span></p>
+                                </div>
+                            </div>
+                            
+                            <div class="message-body">
+                                <h5>Message:</h5>
+                                <p>${message.message}</p>
+                            </div>
+                            
+                            ${message.reply ? `
+                                <div class="message-reply-view">
+                                    <h5>Your Reply (${new Date(message.repliedAt).toLocaleString()}):</h5>
+                                    <p>${message.reply}</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                    
+                    document.getElementById('messageModal').style.display = 'flex';
+                }
+            } catch (error) {
+                console.error('Failed to load message:', error);
+            }
+        }
+        
+        async function sendReply() {
+            const reply = document.getElementById('adminReply').value;
+            
+            if (!reply) {
+                alert('Please enter a reply');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/admin/message/reply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messageId: currentMessageId, reply })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Reply sent successfully!');
+                    document.getElementById('adminReply').value = '';
+                    closeModal('messageModal');
+                    loadMessages(); // Refresh messages
+                } else {
+                    alert('Failed to send reply: ' + data.error);
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+            }
+        }
+        
+        async function markAsRead(messageId) {
+            try {
+                // Note: This endpoint needs to be implemented in server.js
+                const response = await fetch('/api/admin/message/read', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messageId })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    loadMessages(); // Refresh messages
+                }
+            } catch (error) {
+                console.error('Failed to mark as read:', error);
+            }
+        }
+        
+        function filterUsers() {
+            const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+            
+            if (searchTerm) {
+                const filteredUsers = allUsers.filter(user => 
+                    user.username.toLowerCase().includes(searchTerm) ||
+                    user.email.toLowerCase().includes(searchTerm) ||
+                    user.id.toLowerCase().includes(searchTerm)
+                );
+                
+                // Temporarily display filtered users
+                const tableBody = document.getElementById('usersTableBody');
+                tableBody.innerHTML = '';
+                
+                filteredUsers.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.id.substring(0, 8)}...</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>$${user.balance.toFixed(2)}</td>
+                        <td class="${user.totalProfit >= 0 ? 'positive' : 'negative'}">
+                            $${user.totalProfit.toFixed(2)}
+                        </td>
+                        <td>
+                            <span class="status-badge ${user.status === 'active' ? 'success' : 'warning'}">
+                                ${user.status}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-sm btn-primary" onclick="viewUser('${user.id}')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-success" onclick="addFundsToUser('${user.id}', '${user.email}')">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } else {
+                renderUsersTable(); // Show all users
+            }
+        }
+        
+        function nextPage() {
+            const totalPages = Math.ceil(allUsers.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderUsersTable();
+            }
+        }
+        
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderUsersTable();
+            }
+        }
+        
+        function refreshData() {
+            loadDashboardData();
+            alert('Data refreshed!');
+        }
+        
+        function exportData() {
+            alert('Export feature will be available soon!');
+        }
+        
+        function exportUsers() {
+            alert('User export feature will be available soon!');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        function viewChat(chatId) {
+            alert(`Viewing chat ${chatId} - Feature coming soon!`);
+        }
+        
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+                alert(`User ${userId} deleted - Feature coming soon!`);
+            }
+        }
+        
+        window.logout = async function() {
+            try {
+                await fetch('/api/logout', { method: 'POST' });
+                window.location.href = '/login';
+            } catch (error) {
+                console.error('Logout failed:', error);
+            }
+        };
+        
+        // Initialize admin dashboard
+        document.addEventListener('DOMContentLoaded', loadAdminDashboard);
+    </script>
 </body>
 </html>
