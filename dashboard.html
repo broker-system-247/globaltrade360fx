@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - GlobalTrade360</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-chart-line"></i>
+                <span>GlobalTrade<span class="logo-highlight">360</span></span>
+            </div>
+            <button class="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-user">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <h4 id="userName">Loading...</h4>
+                <p id="userEmail">Loading...</p>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#trading" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Trading</span>
+            </a>
+            <a href="#deposit" class="nav-item">
+                <i class="fas fa-wallet"></i>
+                <span>Deposit</span>
+            </a>
+            <a href="#withdraw" class="nav-item">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Withdraw</span>
+            </a>
+            <a href="#history" class="nav-item">
+                <i class="fas fa-history"></i>
+                <span>History</span>
+            </a>
+            <a href="#settings" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+            <a href="/logout" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="status-indicator">
+                <span class="status-dot active"></span>
+                <span>Trading Active</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <h2 id="pageTitle">Dashboard</h2>
+            </div>
+            <div class="topbar-right">
+                <div class="balance-display">
+                    <span class="balance-label">Available Balance:</span>
+                    <span class="balance-amount">$<span id="userBalance">0.00</span></span>
+                </div>
+                <div class="notifications">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>$<span id="totalBalance">0.00</span></h3>
+                        <p>Total Balance</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>$<span id="totalProfit">0.00</span></h3>
+                        <p>Total Profit</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>$<span id="totalDeposited">0.00</span></h3>
+                        <p>Total Deposited</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3><span id="successRate">0%</span></h3>
+                        <p>Success Rate</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="actions-grid">
+                <div class="action-card deposit" id="depositSection">
+                    <h3><i class="fas fa-plus-circle"></i> Deposit Funds</h3>
+                    <p>Add funds to start trading</p>
+                    <button class="btn btn-primary" id="showDepositForm">Deposit Now</button>
+                </div>
+                
+                <div class="action-card trade" id="tradingSection">
+                    <h3><i class="fas fa-robot"></i> Start Trading</h3>
+                    <p>Activate AI trading bot</p>
+                    <div class="trade-form">
+                        <input type="number" id="tradeAmount" placeholder="Amount ($)" min="50">
+                        <select id="tradePair">
+                            <option>BTC/USD</option>
+                            <option>ETH/USD</option>
+                            <option>BNB/USD</option>
+                            <option>SOL/USD</option>
+                        </select>
+                        <button class="btn btn-success" id="startTrade">Start Trade</button>
+                    </div>
+                </div>
+                
+                <div class="action-card withdraw">
+                    <h3><i class="fas fa-download"></i> Withdraw</h3>
+                    <p>Withdraw your profits</p>
+                    <button class="btn btn-secondary" id="showWithdrawForm">Withdraw</button>
+                </div>
+            </div>
+            
+            <!-- Market Data -->
+            <div class="market-section">
+                <h3>Live Market Data</h3>
+                <div class="market-ticker" id="marketTicker">
+                    <!-- Market data will load here -->
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="activity-section">
+                <div class="section-header">
+                    <h3>Recent Trades</h3>
+                    <a href="#all-trades" class="view-all">View All</a>
+                </div>
+                <div class="activity-table">
+                    <div class="table-header">
+                        <div>Pair</div>
+                        <div>Amount</div>
+                        <div>Profit/Loss</div>
+                        <div>Status</div>
+                        <div>Time</div>
+                    </div>
+                    <div id="recentTrades">
+                        <!-- Trades will load here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Deposit Modal -->
+            <div class="modal" id="depositModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Deposit Funds</h3>
+                        <button class="modal-close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="deposit-options">
+                            <div class="deposit-method">
+                                <h4><i class="fab fa-bitcoin"></i> Bitcoin (BTC)</h4>
+                                <div class="address-box">
+                                    <code id="btcAddress">1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</code>
+                                    <button class="copy-btn" data-address="btcAddress">
+                                        <i class="fas fa-copy"></i> Copy
+                                    </button>
+                                </div>
+                                <p class="note">Send only BTC to this address</p>
+                            </div>
+                            
+                            <div class="deposit-method">
+                                <h4><i class="fab fa-ethereum"></i> Ethereum (ETH)</h4>
+                                <div class="address-box">
+                                    <code id="ethAddress">0x742d35Cc6634C0532925a3b844Bc9e1f8C1F0F0E</code>
+                                    <button class="copy-btn" data-address="ethAddress">
+                                        <i class="fas fa-copy"></i> Copy
+                                    </button>
+                                </div>
+                                <p class="note">Send only ETH to this address</p>
+                            </div>
+                            
+                            <div class="deposit-form">
+                                <label>Deposit Amount (USD)</label>
+                                <input type="number" id="depositAmount" placeholder="Minimum $50">
+                                <label>Select Currency</label>
+                                <select id="depositCurrency">
+                                    <option value="BTC">Bitcoin (BTC)</option>
+                                    <option value="ETH">Ethereum (ETH)</option>
+                                    <option value="USDT_TRC20">USDT (TRC20)</option>
+                                </select>
+                                <button class="btn btn-primary btn-block" id="confirmDeposit">Confirm Deposit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>

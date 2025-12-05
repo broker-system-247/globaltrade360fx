@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - GlobalTrade360</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Admin Sidebar -->
+    <div class="sidebar admin-sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-chart-line"></i>
+                <span>Admin<span class="logo-highlight">Panel</span></span>
+            </div>
+            <div class="admin-badge">
+                <i class="fas fa-shield-alt"></i>
+                <span>Super Admin</span>
+            </div>
+        </div>
+        
+        <div class="sidebar-user">
+            <div class="user-avatar admin">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="user-info">
+                <h4 id="adminName">GlobalTrade360</h4>
+                <p>Super Administrator</p>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#users" class="nav-item" data-section="users">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+            </a>
+            <a href="#deposits" class="nav-item" data-section="deposits">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Deposits</span>
+            </a>
+            <a href="#withdrawals" class="nav-item" data-section="withdrawals">
+                <i class="fas fa-credit-card"></i>
+                <span>Withdrawals</span>
+            </a>
+            <a href="#trades" class="nav-item" data-section="trades">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Trades</span>
+            </a>
+            <a href="#settings" class="nav-item" data-section="settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+            <a href="/logout" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="status-indicator">
+                <span class="status-dot active"></span>
+                <span>System Online</span>
+            </div>
+            <button class="btn btn-sm btn-secondary" id="refreshData">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content admin-content">
+        <!-- Top Bar -->
+        <div class="topbar admin-topbar">
+            <div class="topbar-left">
+                <h2 id="adminPageTitle">Admin Dashboard</h2>
+                <div class="admin-actions">
+                    <button class="btn btn-sm btn-primary" id="addUserBtn">
+                        <i class="fas fa-user-plus"></i> Add User
+                    </button>
+                    <button class="btn btn-sm btn-secondary" id="exportData">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="admin-stats">
+                    <span>Users: <strong id="totalUsers">0</strong></span>
+                    <span>Deposits: $<strong id="totalDeposits">0</strong></span>
+                    <span>Profit: $<strong id="platformProfit">0</strong></span>
+                </div>
+                <div class="admin-time" id="currentTime">
+                    Loading...
+                </div>
+            </div>
+        </div>
+        
+        <!-- Admin Dashboard -->
+        <div class="admin-dashboard">
+            <!-- Stats Overview -->
+            <div class="admin-stats-grid" id="adminStats">
+                <!-- Stats will load here -->
+            </div>
+            
+            <!-- Content Sections -->
+            <div class="admin-sections">
+                <!-- Dashboard Section -->
+                <div class="admin-section active" id="dashboardSection">
+                    <h3>Platform Overview</h3>
+                    <div class="overview-cards">
+                        <div class="overview-card">
+                            <h4>Recent Activity</h4>
+                            <div id="recentActivity">
+                                <!-- Activity will load here -->
+                            </div>
+                        </div>
+                        <div class="overview-card">
+                            <h4>Quick Actions</h4>
+                            <div class="quick-actions">
+                                <button class="btn btn-block" id="manageUsersBtn">
+                                    <i class="fas fa-users-cog"></i> Manage Users
+                                </button>
+                                <button class="btn btn-block" id="viewDepositsBtn">
+                                    <i class="fas fa-money-check-alt"></i> Review Deposits
+                                </button>
+                                <button class="btn btn-block" id="approveWithdrawalsBtn">
+                                    <i class="fas fa-check-circle"></i> Approve Withdrawals
+                                </button>
+                                <button class="btn btn-block" id="systemSettingsBtn">
+                                    <i class="fas fa-sliders-h"></i> System Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Users Section -->
+                <div class="admin-section" id="usersSection">
+                    <div class="section-header">
+                        <h3>User Management</h3>
+                        <div class="section-actions">
+                            <input type="text" id="searchUsers" placeholder="Search users...">
+                            <button class="btn btn-primary" id="addFundsBtn">
+                                <i class="fas fa-plus-circle"></i> Add Funds
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="users-table-container">
+                        <table class="admin-table" id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Balance</th>
+                                    <th>Profit</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Users will load here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- User Details Modal -->
+                <div class="modal" id="userDetailsModal">
+                    <div class="modal-content wide">
+                        <div class="modal-header">
+                            <h3>User Details</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body" id="userDetailsContent">
+                            <!-- User details will load here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Add Funds Modal -->
+                <div class="modal" id="addFundsModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Add Funds to User</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addFundsForm">
+                                <div class="form-group">
+                                    <label>User Email</label>
+                                    <input type="email" id="fundsUserEmail" required readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Amount (USD)</label>
+                                    <input type="number" id="fundsAmount" required min="1" step="0.01">
+                                </div>
+                                <div class="form-group">
+                                    <label>Notes</label>
+                                    <textarea id="fundsNotes" rows="3" placeholder="Reason for adding funds..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    Add Funds
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Freeze Funds Modal -->
+                <div class="modal" id="freezeFundsModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Manage User Funds</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="freezeFundsForm">
+                                <div class="form-group">
+                                    <label>User Email</label>
+                                    <input type="email" id="freezeUserEmail" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Action</label>
+                                    <select id="freezeAction">
+                                        <option value="freeze">Freeze Funds (Prevent withdrawals)</option>
+                                        <option value="unfreeze">Unfreeze Funds (Allow withdrawals)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Reason</label>
+                                    <textarea id="freezeReason" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-warning btn-block">
+                                    Execute Action
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
