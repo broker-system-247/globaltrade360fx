@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - GlobalTrade360</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-gold: #FFD700;
+            --secondary-gold: #FFC107;
+            --dark-gold: #D4AF37;
+            --dark-bg: #0A0E17;
+            --card-bg: #1A1F2E;
+            --success: #00C9A7;
+            --danger: #FF6B6B;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0A0E17 0%, #1A1F2E 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        
+        .gold-gradient {
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gold-bg-gradient {
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+        }
+        
+        .glass-card {
+            background: rgba(26, 31, 46, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            color: #000;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 250px;
+            background: rgba(10, 14, 23, 0.95);
+            border-right: 1px solid rgba(255, 215, 0, 0.1);
+            padding-top: 20px;
+            z-index: 1000;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .nav-link {
+            color: #fff;
+            padding: 12px 20px;
+            margin: 5px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--primary-gold);
+        }
+        
+        .stat-card {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .profit-badge {
+            background: linear-gradient(135deg, var(--success), #00ffaa);
+            color: #000;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .table-dark {
+            background: rgba(26, 31, 46, 0.7);
+        }
+        
+        .table-dark th {
+            border-color: rgba(255, 215, 0, 0.1);
+            color: var(--primary-gold);
+        }
+        
+        .table-dark td {
+            border-color: rgba(255, 215, 0, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+        .deposit-address {
+            font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar d-none d-md-block">
+        <div class="text-center mb-4">
+            <a href="/" class="text-decoration-none">
+                <h4 class="gold-gradient mb-0">GlobalTrade360</h4>
+                <small class="text-muted">Trading Platform</small>
+            </a>
+        </div>
+        
+        <div class="text-center mb-4">
+            <div class="glass-card p-3 mx-3">
+                <small class="text-muted">Welcome</small>
+                <h5 id="userName" class="gold-gradient mb-0">Loading...</h5>
+                <small id="userEmail" class="text-muted">Loading...</small>
+            </div>
+        </div>
+        
+        <nav class="nav flex-column">
+            <a class="nav-link active" href="#" onclick="showSection('overview')">
+                <i class="fas fa-tachometer-alt me-2"></i> Overview
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('invest')">
+                <i class="fas fa-chart-line me-2"></i> Invest
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('deposit')">
+                <i class="fas fa-wallet me-2"></i> Deposit
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('withdraw')">
+                <i class="fas fa-money-bill-wave me-2"></i> Withdraw
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('history')">
+                <i class="fas fa-history me-2"></i> History
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('ai-chat')">
+                <i class="fas fa-robot me-2"></i> AI Assistant
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('profile')">
+                <i class="fas fa-user me-2"></i> Profile
+            </a>
+            <a class="nav-link text-danger" href="#" onclick="logout()">
+                <i class="fas fa-sign-out-alt me-2"></i> Logout
+            </a>
+        </nav>
+        
+        <div class="mt-auto p-3">
+            <div class="glass-card p-3">
+                <small class="text-muted d-block">Support Email</small>
+                <small>stevenlogan362@gmail.com</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Topbar -->
+    <nav class="navbar navbar-dark d-md-none nav-glass">
+        <div class="container-fluid">
+            <a class="navbar-brand gold-gradient" href="/">GlobalTrade360</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="offcanvas offcanvas-start glass-card" tabindex="-1" id="mobileMenu">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title gold-gradient">Menu</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="text-center mb-4">
+                <h5 id="mobileUserName" class="gold-gradient mb-0">Loading...</h5>
+                <small id="mobileUserEmail" class="text-muted">Loading...</small>
+            </div>
+            
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light border-0" onclick="showSection('overview')">
+                    <i class="fas fa-tachometer-alt me-2"></i> Overview
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light border-0" onclick="showSection('invest')">
+                    <i class="fas fa-chart-line me-2"></i> Invest
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light border-0" onclick="showSection('deposit')">
+                    <i class="fas fa-wallet me-2"></i> Deposit
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light border-0" onclick="showSection('withdraw')">
+                    <i class="fas fa-money-bill-wave me-2"></i> Withdraw
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light border-0" onclick="showSection('history')">
+                    <i class="fas fa-history me-2"></i> History
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light border-0" onclick="showSection('ai-chat')">
+                    <i class="fas fa-robot me-2"></i> AI Assistant
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light border-0" onclick="showSection('profile')">
+                    <i class="fas fa-user me-2"></i> Profile
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-danger border-0" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Overview Section -->
+        <div id="overviewSection">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="gold-gradient">Dashboard Overview</h3>
+                <div class="text-end">
+                    <small class="text-muted">Last updated: <span id="lastUpdated">Just now</span></small>
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="glass-card stat-card">
+                        <small class="text-muted d-block">Total Balance</small>
+                        <div class="stat-value gold-gradient" id="totalBalance">$0.00</div>
+                        <span class="profit-badge">+0.0% Today</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="glass-card stat-card">
+                        <small class="text-muted d-block">Active Investments</small>
+                        <div class="stat-value gold-gradient" id="activeInvestments">0</div>
+                        <small class="text-success">Growing</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="glass-card stat-card">
+                        <small class="text-muted d-block">Total Profit</small>
+                        <div class="stat-value text-success" id="totalProfit">$0.00</div>
+                        <small class="text-success">All Time</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="glass-card stat-card">
+                        <small class="text-muted d-block">Today's Profit</small>
+                        <div class="stat-value text-success" id="todayProfit">$0.00</div>
+                        <small class="text-success">Live Updates</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="glass-card p-4">
+                        <h5 class="mb-3 gold-gradient">Quick Actions</h5>
+                        <div class="row">
+                            <div class="col-md-3 col-6 mb-3">
+                                <button class="btn btn-gold w-100" onclick="showSection('invest')">
+                                    <i class="fas fa-plus me-2"></i>Invest
+                                </button>
+                            </div>
+                            <div class="col-md-3 col-6 mb-3">
+                                <button class="btn btn-outline-light w-100" onclick="showSection('deposit')">
+                                    <i class="fas fa-arrow-down me-2"></i>Deposit
+                                </button>
+                            </div>
+                            <div class="col-md-3 col-6 mb-3">
+                                <button class="btn btn-outline-light w-100" onclick="showSection('withdraw')">
+                                    <i class="fas fa-arrow-up me-2"></i>Withdraw
+                                </button>
+                            </div>
+                            <div class="col-md-3 col-6 mb-3">
+                                <button class="btn btn-outline-light w-100" onclick="showSection('ai-chat')">
+                                    <i class="fas fa-robot me-2"></i>AI Chat
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Transactions -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="glass-card p-4">
+                        <h5 class="mb-3 gold-gradient">Recent Transactions</h5>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentTransactions">
+                                    <tr><td colspan="5" class="text-center">No transactions yet</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invest Section -->
+        <div id="investSection" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="gold-gradient">Investment Plans</h3>
+                <button class="btn btn-outline-light" onclick="showSection('overview')">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </button>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="glass-card p-4 h-100">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-star fa-3x gold-gradient mb-3"></i>
+                            <h4>Basic Plan</h4>
+                            <h2 class="gold-gradient">3.2% <small class="text-muted">Daily</small></h2>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Minimum: $500</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Maximum: $5,000</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Duration: 30 Days</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Capital Return: Yes</li>
+                        </ul>
+                        <button class="btn btn-gold w-100" onclick="investNow('basic')">Invest Now</button>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="glass-card p-4 h-100" style="border: 2px solid var(--primary-gold);">
+                        <div class="text-center mb-4">
+                            <span class="badge gold-bg-gradient mb-2" style="color: #000;">MOST POPULAR</span>
+                            <i class="fas fa-crown fa-3x gold-gradient mb-3"></i>
+                            <h4>Pro Plan</h4>
+                            <h2 class="gold-gradient">4.8% <small class="text-muted">Daily</small></h2>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Minimum: $5,000</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Maximum: $50,000</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Duration: 60 Days</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Capital Return: Yes</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>AI Trading Signals</li>
+                        </ul>
+                        <button class="btn btn-gold w-100" onclick="investNow('pro')">Invest Now</button>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="glass-card p-4 h-100">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-rocket fa-3x gold-gradient mb-3"></i>
+                            <h4>VIP Plan</h4>
+                            <h2 class="gold-gradient">7.5% <small class="text-muted">Daily</small></h2>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Minimum: $50,000</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Maximum: Unlimited</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Duration: 90 Days</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>24/7 Personal Manager</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Priority Withdrawals</li>
+                        </ul>
+                        <button class="btn btn-gold w-100" onclick="investNow('vip')">Invest Now</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Active Investments -->
+            <div class="glass-card p-4 mt-4">
+                <h5 class="mb-3 gold-gradient">Active Investments</h5>
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>Plan</th>
+                                <th>Amount</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Profit</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activeInvestmentsTable">
+                            <tr><td colspan="6" class="text-center">No active investments</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deposit Section -->
+        <div id="depositSection" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="gold-gradient">Deposit Funds</h3>
+                <button class="btn btn-outline-light" onclick="showSection('overview')">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </button>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="glass-card p-4 mb-4">
+                        <h5 class="mb-3 gold-gradient">Deposit Amount</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Amount ($)</label>
+                            <input type="number" class="form-control bg-dark text-light border-secondary" id="depositAmount" min="100" value="500">
+                            <small class="text-muted">Minimum deposit: $100</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Select Currency</label>
+                            <select class="form-select bg-dark text-light border-secondary" id="depositCurrency">
+                                <option value="BTC">Bitcoin (BTC)</option>
+                                <option value="ETH">Ethereum (ETH)</option>
+                                <option value="USDT">USDT (TRC20)</option>
+                                <option value="USDC">USDC</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-gold w-100" onclick="generateDepositAddress()">Generate Deposit Address</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="glass-card p-4">
+                        <h5 class="mb-3 gold-gradient">Deposit Instructions</h5>
+                        <div id="depositInstructions">
+                            <p class="text-muted">Select amount and currency, then click "Generate Deposit Address" to get your unique deposit address.</p>
+                            <div class="alert alert-info">
+                                <small>
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Deposits are credited after 3 blockchain confirmations.
+                                </small>
+                            </div>
+                            <div class="alert alert-warning">
+                                <small>
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    Send only the selected currency to the provided address.
+                                </small>
+                            </div>
+                        </div>
+                        <div id="depositAddressDisplay" style="display: none;">
+                            <h6 class="mt-3 gold-gradient">Send to Address:</h6>
+                            <div class="deposit-address mb-3" id="cryptoAddress"></div>
+                            <div class="alert alert-success">
+                                <small>
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    Deposit address generated. Send exact amount within 30 minutes.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Withdraw Section -->
+        <div id="withdrawSection" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="gold-gradient">Withdraw Funds</h3>
+                <button class="btn btn-outline-light" onclick="showSection('overview')">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </button>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="glass-card p-4 mb-4">
+                        <h5 class="mb-3 gold-gradient">Withdrawal Details</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Available Balance</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="availableBalance" readonly value="$0.00">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Amount ($)</label>
+                            <input type="number" class="form-control bg-dark text-light border-secondary" id="withdrawAmount" min="50">
+                            <small class="text-muted">Minimum withdrawal: $50</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Wallet Address</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="withdrawWallet" placeholder="Enter your crypto wallet address">
+                        </div>
+                        <button class="btn btn-gold w-100" onclick="processWithdrawal()">Request Withdrawal</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="glass-card p-4">
+                        <h5 class="mb-3 gold-gradient">Withdrawal Information</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Processing time: 5-10 minutes</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>No withdrawal fees</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>24/7 withdrawals</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Secure and encrypted</li>
+                        </ul>
+                        <div class="alert alert-info mt-3">
+                            <small>
+                                <i class="fas fa-info-circle me-2"></i>
+                                Ensure your wallet address is correct. Withdrawals cannot be reversed.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Withdrawals -->
+            <div class="glass-card p-4 mt-4">
+                <h5 class="mb-3 gold-gradient">Recent Withdrawals</h5>
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Wallet</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentWithdrawals">
+                            <tr><td colspan="4" class="text-center">No withdrawals yet</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Chat Section -->
+        <div id="aiChatSection" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="gold-gradient">AI Trading Assistant</h3>
+                <button class="btn btn-outline-light" onclick="showSection('overview')">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </button>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="glass-card p-4" style="height: 500px;">
+                        <div id="chatMessages" style="height: 400px; overflow-y: auto; padding-right: 10px;">
+                            <div class="alert alert-info">
+                                <strong>AI Assistant:</strong> Hello! I'm your AI trading assistant. I can help you with investment advice, market analysis, deposit instructions, or answer any questions about our platform. How can I assist you today?
+                            </div>
+                        </div>
+                        <div class="input-group mt-3">
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="chatInput" placeholder="Type your message...">
+                            <button class="btn btn-gold" onclick="sendAIMessage()">Send</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card p-4">
+                        <h5 class="mb-3 gold-gradient">Quick Questions</h5>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-light text-start" onclick="askAI('How do I deposit?')">
+                                <i class="fas fa-question-circle me-2"></i>How do I deposit?
+                            </button>
+                            <button class="btn btn-outline-light text-start" onclick="askAI('What is the minimum withdrawal?')">
+                                <i class="fas fa-question-circle me-2"></i>Minimum withdrawal?
+                            </button>
+                            <button class="btn btn-outline-light text-start" onclick="askAI('Give me trading advice')">
+                                <i class="fas fa-question-circle me-2"></i>Trading advice
+                            </button>
+                            <button class="btn btn-outline-light text-start" onclick="askAI('I need support')">
+                                <i class="fas fa-question-circle me-2"></i>I need support
+                            </button>
+                        </div>
+                        <div class="alert alert-warning mt-3">
+                            <small>
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                For account-specific issues, AI will forward your message to support.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profileSection" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="gold-gradient">Profile Settings</h3>
+                <button class="btn btn-outline-light" onclick="showSection('overview')">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </button>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="glass-card p-4 mb-4">
+                        <h5 class="mb-3 gold-gradient">Account Information</h5>
+                        <div class="mb-3">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="profileFirstName">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="profileLastName">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control bg-dark text-light border-secondary" id="profileEmail">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="profileUsername" readonly>
+                        </div>
+                        <button class="btn btn-gold" onclick="updateProfile()">Update Profile</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="glass-card p-4">
+                        <h5 class="mb-3 gold-gradient">Security</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Current Password</label>
+                            <input type="password" class="form-control bg-dark text-light border-secondary" id="currentPassword">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">New Password</label>
+                            <input type="password" class="form-control bg-dark text-light border-secondary" id="newPassword">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-control bg-dark text-light border-secondary" id="confirmNewPassword">
+                        </div>
+                        <button class="btn btn-outline-light" onclick="changePassword()">Change Password</button>
+                        
+                        <div class="mt-4">
+                            <h6 class="gold-gradient">Account Statistics</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">Member Since: <span id="joinDate">Loading...</span></li>
+                                <li class="mb-2">Total Investments: <span id="totalInvestments">0</span></li>
+                                <li class="mb-2">Total Withdrawals: <span id="totalWithdrawals">0</span></li>
+                                <li class="mb-2">Account Status: <span class="badge bg-success">Active</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap & Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Global variables
+        let sessionId = localStorage.getItem('sessionId');
+        let currentUser = null;
+        let cryptoAddresses = {};
+        let profitInterval;
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!sessionId) {
+                window.location.href = '/';
+                return;
+            }
+            
+            loadUserData();
+            loadCryptoAddresses();
+            startProfitUpdates();
+            
+            // Set up section switching
+            showSection('overview');
+        });
+
+        // Load user data
+        async function loadUserData() {
+            try {
+                const response = await fetch('/api/user', {
+                    headers: { 'x-session-id': sessionId }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        currentUser = data.user;
+                        updateUI();
+                        loadUserTransactions();
+                        loadActiveInvestments();
+                    } else {
+                        logout();
+                    }
+                } else {
+                    logout();
+                }
+            } catch (error) {
+                showNotification('error', 'Network error. Please try again.');
+            }
+        }
+
+        // Update UI with user data
+        function updateUI() {
+            if (!currentUser) return;
+            
+            // Update user info
+            document.getElementById('userName').textContent = currentUser.firstName + ' ' + currentUser.lastName;
+            document.getElementById('userEmail').textContent = currentUser.email;
+            document.getElementById('mobileUserName').textContent = currentUser.firstName + ' ' + currentUser.lastName;
+            document.getElementById('mobileUserEmail').textContent = currentUser.email;
+            
+            // Update balance
+            document.getElementById('totalBalance').textContent = '$' + currentUser.balance.toLocaleString();
+            document.getElementById('availableBalance').value = '$' + currentUser.balance.toLocaleString();
+            
+            // Update profile form
+            document.getElementById('profileFirstName').value = currentUser.firstName;
+            document.getElementById('profileLastName').value = currentUser.lastName;
+            document.getElementById('profileEmail').value = currentUser.email;
+            document.getElementById('profileUsername').value = currentUser.username;
+            
+            // Update join date
+            if (currentUser.joinDate) {
+                const joinDate = new Date(currentUser.joinDate);
+                document.getElementById('joinDate').textContent = joinDate.toLocaleDateString();
+            }
+        }
+
+        // Load crypto addresses
+        async function loadCryptoAddresses() {
+            try {
+                const response = await fetch('/api/crypto-addresses');
+                const data = await response.json();
+                cryptoAddresses = data;
+            } catch (error) {
+                // Use fallback addresses
+                cryptoAddresses = {
+                    BTC: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
+                    ETH: '0x71C7656EC7ab88b098defB751B7401B5f6d8976F',
+                    USDT: 'TYASr8UVgUoSdxMJ5rS8H3dLF9BkTrBw1y',
+                    USDC: '0x71C7656EC7ab88b098defB751B7401B5f6d8976F'
+                };
+            }
+        }
+
+        // Load user transactions
+        async function loadUserTransactions() {
+            if (!currentUser || !currentUser.transactions) return;
+            
+            const transactions = currentUser.transactions;
+            const recentTransactions = document.getElementById('recentTransactions');
+            const recentWithdrawals = document.getElementById('recentWithdrawals');
+            
+            // Clear tables
+            recentTransactions.innerHTML = '';
+            recentWithdrawals.innerHTML = '';
+            
+            // Sort transactions by date (newest first)
+            transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Display recent transactions (last 5)
+            const recent = transactions.slice(0, 5);
+            if (recent.length === 0) {
+                recentTransactions.innerHTML = '<tr><td colspan="5" class="text-center">No transactions yet</td></tr>';
+            } else {
+                recent.forEach(transaction => {
+                    const row = document.createElement('tr');
+                    const date = new Date(transaction.date).toLocaleDateString();
+                    const amount = transaction.amount >= 0 ? 
+                        `<span class="text-success">+$${Math.abs(transaction.amount).toLocaleString()}</span>` :
+                        `<span class="text-danger">-$${Math.abs(transaction.amount).toLocaleString()}</span>`;
+                    
+                    const statusBadge = transaction.status === 'completed' ? 
+                        '<span class="badge bg-success">Completed</span>' :
+                        transaction.status === 'pending' ? 
+                        '<span class="badge bg-warning">Pending</span>' :
+                        '<span class="badge bg-info">Processing</span>';
+                    
+                    row.innerHTML = `
+                        <td>${date}</td>
+                        <td>${transaction.type}</td>
+                        <td>${amount}</td>
+                        <td>${statusBadge}</td>
+                        <td>${transaction.description || ''}</td>
+                    `;
+                    recentTransactions.appendChild(row);
+                });
+            }
+            
+            // Display withdrawals
+            const withdrawals = transactions.filter(t => t.type === 'withdrawal');
+            if (withdrawals.length === 0) {
+                recentWithdrawals.innerHTML = '<tr><td colspan="4" class="text-center">No withdrawals yet</td></tr>';
+            } else {
+                withdrawals.slice(0, 5).forEach(withdrawal => {
+                    const row = document.createElement('tr');
+                    const date = new Date(withdrawal.date).toLocaleDateString();
+                    const wallet = withdrawal.walletAddress ? 
+                        withdrawal.walletAddress.substring(0, 10) + '...' + 
+                        withdrawal.walletAddress.substring(withdrawal.walletAddress.length - 6) :
+                        'N/A';
+                    
+                    const statusBadge = withdrawal.status === 'completed' ? 
+                        '<span class="badge bg-success">Completed</span>' :
+                        withdrawal.status === 'pending' ? 
+                        '<span class="badge bg-warning">Pending</span>' :
+                        '<span class="badge bg-info">Processing</span>';
+                    
+                    row.innerHTML = `
+                        <td>${date}</td>
+                        <td class="text-danger">-$${Math.abs(withdrawal.amount).toLocaleString()}</td>
+                        <td>${wallet}</td>
+                        <td>${statusBadge}</td>
+                    `;
+                    recentWithdrawals.appendChild(row);
+                });
+            }
+            
+            // Update statistics
+            updateStatistics(transactions);
+        }
+
+        // Load active investments
+        function loadActiveInvestments() {
+            if (!currentUser || !currentUser.investments) return;
+            
+            const activeInvestments = currentUser.investments.filter(inv => inv.status === 'active');
+            const table = document.getElementById('activeInvestmentsTable');
+            
+            // Update count
+            document.getElementById('activeInvestments').textContent = activeInvestments.length;
+            
+            // Clear table
+            table.innerHTML = '';
+            
+            if (activeInvestments.length === 0) {
+                table.innerHTML = '<tr><td colspan="6" class="text-center">No active investments</td></tr>';
+            } else {
+                // Calculate total profit
+                let totalProfit = 0;
+                
+                activeInvestments.forEach(investment => {
+                    const row = document.createElement('tr');
+                    const startDate = new Date(investment.startDate).toLocaleDateString();
+                    const endDate = new Date(investment.endDate).toLocaleDateString();
+                    const profit = investment.totalProfit || 0;
+                    
+                    totalProfit += profit;
+                    
+                    row.innerHTML = `
+                        <td>${investment.plan.charAt(0).toUpperCase() + investment.plan.slice(1)}</td>
+                        <td>$${investment.amount.toLocaleString()}</td>
+                        <td>${startDate}</td>
+                        <td>${endDate}</td>
+                        <td class="text-success">$${profit.toFixed(2)}</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                    `;
+                    table.appendChild(row);
+                });
+                
+                // Update profit displays
+                document.getElementById('totalProfit').textContent = '$' + totalProfit.toFixed(2);
+                
+                // Calculate today's profit (simulated)
+                const todayProfit = totalProfit * 0.032 / 30; // Assuming basic plan rate
+                document.getElementById('todayProfit').textContent = '$' + todayProfit.toFixed(2);
+            }
+        }
+
+        // Update statistics
+        function updateStatistics(transactions) {
+            if (!transactions) return;
+            
+            const totalInvestments = currentUser.investments ? currentUser.investments.length : 0;
+            const totalWithdrawals = transactions.filter(t => t.type === 'withdrawal').length;
+            
+            document.getElementById('totalInvestments').textContent = totalInvestments;
+            document.getElementById('totalWithdrawals').textContent = totalWithdrawals;
+        }
+
+        // Section switching
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = ['overviewSection', 'investSection', 'depositSection', 
+                            'withdrawSection', 'historySection', 'aiChatSection', 'profileSection'];
+            sections.forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId + 'Section').style.display = 'block';
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[onclick="showSection('${sectionId}')"]`).classList.add('active');
+            
+            // Close mobile menu if open
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenu) {
+                const bsOffcanvas = bootstrap.Offcanvas.getInstance(mobileMenu);
+                if (bsOffcanvas) bsOffcanvas.hide();
+            }
+        }
+
+        // Invest now
+        async function investNow(plan) {
+            const amount = parseFloat(prompt(`Enter amount for ${plan.toUpperCase()} plan:`));
+            
+            if (!amount || amount <= 0) {
+                showNotification('error', 'Invalid amount');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/invest', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-session-id': sessionId
+                    },
+                    body: JSON.stringify({ plan, amount })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showNotification('success', `Successfully invested $${amount} in ${plan.toUpperCase()} plan!`);
+                    currentUser.balance = data.balance;
+                    updateUI();
+                    loadUserTransactions();
+                    loadActiveInvestments();
+                } else {
+                    showNotification('error', data.error || 'Investment failed');
+                }
+            } catch (error) {
+                showNotification('error', 'Network error. Please try again.');
+            }
+        }
+
+        // Generate deposit address
+        async function generateDepositAddress() {
+            const amount = document.getElementById('depositAmount').value;
+            const currency = document.getElementById('depositCurrency').value;
+            
+            if (!amount || amount < 100) {
+                showNotification('error', 'Minimum deposit is $100');
+                return;
+            }
+            
+            const address = cryptoAddresses[currency];
+            if (!address) {
+                showNotification('error', 'Currency not supported');
+                return;
+            }
+            
+            // Show address
+            document.getElementById('cryptoAddress').textContent = address;
+            document.getElementById('depositAddressDisplay').style.display = 'block';
+            
+            // Send deposit request to server
+            try {
+                const response = await fetch('/api/deposit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-session-id': sessionId
+                    },
+                    body: JSON.stringify({ amount, currency })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    showNotification('info', 'Deposit address generated. Send funds within 30 minutes.');
+                }
+            } catch (error) {
+                showNotification('info', 'Deposit address displayed. Send funds to this address.');
+            }
+        }
+
+        // Process withdrawal
+        async function processWithdrawal() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const walletAddress = document.getElementById('withdrawWallet').value;
+            
+            if (!amount || amount < 50) {
+                showNotification('error', 'Minimum withdrawal is $50');
+                return;
+            }
+            
+            if (amount > currentUser.balance) {
+                showNotification('error', 'Insufficient balance');
+                return;
+            }
+            
+            if (!walletAddress || walletAddress.length < 10) {
+                showNotification('error', 'Please enter a valid wallet address');
+                return;
+            }
+            
+            if (!confirm(`Withdraw $${amount} to ${walletAddress.substring(0, 20)}...?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/withdraw', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-session-id': sessionId
+                    },
+                    body: JSON.stringify({ amount, walletAddress })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showNotification('success', `Withdrawal request submitted for $${amount}! Processing...`);
+                    currentUser.balance = data.balance;
+                    updateUI();
+                    loadUserTransactions();
+                } else {
+                    showNotification('error', data.error || 'Withdrawal failed');
+                }
+            } catch (error) {
+                showNotification('error', 'Network error. Please try again.');
+            }
+        }
+
+        // AI Chat functions
+        function askAI(question) {
+            document.getElementById('chatInput').value = question;
+            sendAIMessage();
+        }
+
+        async function sendAIMessage() {
+            const message = document.getElementById('chatInput').value;
+            if (!message.trim()) return;
+            
+            // Add user message
+            addChatMessage('user', message);
+            document.getElementById('chatInput').value = '';
+            
+            try {
+                const response = await fetch('/api/ai-chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-session-id': sessionId
+                    },
+                    body: JSON.stringify({ message })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Add AI response
+                    setTimeout(() => {
+                        addChatMessage('ai', data.response);
+                    }, 500);
+                } else {
+                    addChatMessage('ai', 'Sorry, I encountered an error. Please try again.');
+                }
+            } catch (error) {
+                addChatMessage('ai', 'Network error. Please check your connection.');
+            }
+        }
+
+        function addChatMessage(sender, message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            
+            if (sender === 'user') {
+                messageDiv.className = 'alert alert-secondary mb-2 text-end';
+                messageDiv.innerHTML = `<strong>You:</strong> ${message}`;
+            } else {
+                messageDiv.className = 'alert alert-info mb-2';
+                messageDiv.innerHTML = `<strong>AI Assistant:</strong> ${message}`;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Update profile
+        async function updateProfile() {
+            const firstName = document.getElementById('profileFirstName').value;
+            const lastName = document.getElementById('profileLastName').value;
+            const email = document.getElementById('profileEmail').value;
+            
+            try {
+                const response = await fetch('/api/user/update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-session-id': sessionId
+                    },
+                    body: JSON.stringify({ firstName, lastName, email })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showNotification('success', 'Profile updated successfully!');
+                    currentUser = data.user;
+                    updateUI();
+                } else {
+                    showNotification('error', data.error || 'Update failed');
+                }
+            } catch (error) {
+                showNotification('error', 'Network error. Please try again.');
+            }
+        }
+
+        // Change password (simulated)
+        function changePassword() {
+            const currentPass = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirmPass = document.getElementById('confirmNewPassword').value;
+            
+            if (!currentPass || !newPass || !confirmPass) {
+                showNotification('error', 'Please fill all password fields');
+                return;
+            }
+            
+            if (newPass !== confirmPass) {
+                showNotification('error', 'New passwords do not match');
+                return;
+            }
+            
+            if (newPass.length < 6) {
+                showNotification('error', 'Password must be at least 6 characters');
+                return;
+            }
+            
+            showNotification('success', 'Password changed successfully!');
+            
+            // Clear password fields
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmNewPassword').value = '';
+        }
+
+        // Start profit updates (simulated)
+        function startProfitUpdates() {
+            // Update last updated time
+            setInterval(() => {
+                document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+            }, 60000);
+            
+            // Simulate profit growth
+            profitInterval = setInterval(() => {
+                if (currentUser && currentUser.investments && currentUser.investments.length > 0) {
+                    // Update today's profit display
+                    const todayProfit = parseFloat(document.getElementById('todayProfit').textContent.replace('$', '')) || 0;
+                    const newProfit = todayProfit + (Math.random() * 0.5);
+                    document.getElementById('todayProfit').textContent = '$' + newProfit.toFixed(2);
+                    
+                    // Update total balance
+                    const totalBalance = parseFloat(document.getElementById('totalBalance').textContent.replace('$', '').replace(/,/g, '')) || 0;
+                    document.getElementById('totalBalance').textContent = '$' + (totalBalance + (Math.random() * 0.1)).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                }
+            }, 10000); // Update every 10 seconds
+        }
+
+        // Logout
+        async function logout() {
+            try {
+                await fetch('/api/logout', {
+                    method: 'POST',
+                    headers: { 'x-session-id': sessionId }
+                });
+            } catch (error) {
+                // Ignore errors
+            }
+            
+            // Clear local storage
+            localStorage.removeItem('sessionId');
+            
+            // Redirect to landing page
+            window.location.href = '/';
+        }
+
+        // Show notification
+        function showNotification(type, message) {
+            const alertClass = type === 'success' ? 'alert-success' : 
+                              type === 'error' ? 'alert-danger' : 'alert-info';
+            
+            const notification = document.createElement('div');
+            notification.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+            notification.style.cssText = 'top: 20px; right: 20px; z-index: 1050; max-width: 300px;';
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
