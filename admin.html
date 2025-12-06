@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - GlobalTrade360</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-gold: #FFD700;
+            --secondary-gold: #FFC107;
+            --dark-gold: #D4AF37;
+            --dark-bg: #0A0E17;
+            --card-bg: #1A1F2E;
+            --success: #00C9A7;
+            --danger: #FF6B6B;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0A0E17 0%, #1A1F2E 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        
+        .gold-gradient {
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gold-bg-gradient {
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+        }
+        
+        .glass-card {
+            background: rgba(26, 31, 46, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            color: #000;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 250px;
+            background: rgba(10, 14, 23, 0.95);
+            border-right: 1px solid rgba(255, 215, 0, 0.1);
+            padding-top: 20px;
+            z-index: 1000;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .nav-link {
+            color: #fff;
+            padding: 12px 20px;
+            margin: 5px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--primary-gold);
+        }
+        
+        .stat-card {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .table-dark {
+            background: rgba(26, 31, 46, 0.7);
+        }
+        
+        .table-dark th {
+            border-color: rgba(255, 215, 0, 0.1);
+            color: var(--primary-gold);
+        }
+        
+        .table-dark td {
+            border-color: rgba(255, 215, 0, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar d-none d-md-block">
+        <div class="text-center mb-4">
+            <a href="/" class="text-decoration-none">
+                <h4 class="gold-gradient mb-0">GlobalTrade360</h4>
+                <small class="text-muted">Admin Panel</small>
+            </a>
+        </div>
+        
+        <div class="text-center mb-4">
+            <div class="glass-card p-3 mx-3">
+                <small class="text-muted">Administrator</small>
+                <h5 id="adminName" class="gold-gradient mb-0">Admin System</h5>
+                <small id="adminEmail" class="text-muted">stevenlogan362@gmail.com</small>
+            </div>
+        </div>
+        
+        <nav class="nav flex-column">
+            <a class="nav-link active" href="#" onclick="showSection('dashboard')">
+                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('users')">
+                <i class="fas fa-users me-2"></i> Users
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('crypto')">
+                <i class="fab fa-bitcoin me-2"></i> Crypto Addresses
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('transactions')">
+                <i class="fas fa-exchange-alt me-2"></i> Transactions
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('complaints')">
+                <i class="fas fa-comments me-2"></i> Complaints
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('email')">
+                <i class="fas fa-envelope me-2"></i> Email System
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('settings')">
+                <i class="fas fa-cog me-2"></i> Settings
+            </a>
+            <a class="nav-link text-danger" href="#" onclick="logout()">
+                <i class="fas fa-sign-out-alt me-2"></i> Logout
+            </a>
+        </nav>
+        
+        <div class="mt-auto p-3">
+            <div class="glass-card p-3">
+                <small class="text-muted d-block">Server Status</small>
+                <small class="text-success">Online</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Topbar -->
+    <nav class="navbar navbar-dark d-md-none nav-glass">
+        <div class="container-fluid">
+            <a class="navbar-brand gold-gradient" href="/">Admin Panel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="offcanvas offcanvas-start glass-card" tabindex="-1" id="mobileMenu">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title gold-gradient">Admin Menu</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light border-0" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light border-0" onclick="showSection('users')">
+                    <i class="fas fa-users me-2"></i> Users
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light border-0" onclick="showSection('crypto')">
+                    <i class="fab fa-bitcoin me-2"></i> Crypto Addresses
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light border-0" onclick="showSection('transactions')">
+                    <i class="fas fa-exchange-alt me-2"></i> Transactions
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light border-0" onclick="showSection('complaints')">
+                    <i class="fas fa-comments me-2"></i> Complaints
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light border-0" onclick="showSection('email')">
+                    <i class="fas fa-envelope me-2"></i> Email System
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-light border-0" onclick="showSection('settings')">
+                    <i class="fas fa-cog me-2"></i> Settings
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent text-danger border-0" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Dashboard Section -->
+        <div id="dashboardSection">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="gold-gradient">Admin Dashboard</h3>
+                <div class="text-end">
+                    <small class="text-muted">Last updated: <span id="adminLastUpdated">Just now</span></small>
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="glass-card stat-card">
+                        <small class="text-muted d-block">Total Users</small>
+                        <div class="stat-value gold-gradient" id="totalUsers">0</div>
+                        <small class="text-success">+0 Today</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="glass-card stat-card">
+                        <small class="text-muted d-block">Total Balance</small>
+                        <div class="stat-value gold-gradient" id="totalPlatformBalance">$0</div>
+                        <small class="text-success">All Users</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="glass-card stat-card">
+                        <small class="text-muted d-block">Active Investments</small>
+                        <div class="stat-value gold-gradient" id="totalActiveInvestments">0</div>
+                        <small class="text-success">Growing</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="glass-card stat-card">
+                        <small class="text-muted d-block">Total Profit</small>
+                        <div class="stat-value text-success" id="totalPlatformProfit">$0</div>
+                        <small class="text-success">All Time</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="glass-card p-4">
+                        <h5 class="mb-3 gold-gradient">Quick Actions</h5>
+                        <div class="row">
+                            <div class="col-md-3 col-6 mb-3">
+                                <button class="btn btn-gold w-100" onclick="showSection('users')">
+                                    <i class="fas fa-user-plus me-2"></i>Add User
+                                </button>
+                            </div>
+                            <div class="col-md-3 col-6 mb-3">
+                                <button class="btn btn-outline-light w-100" onclick="showSection('email')">
+                                    <i class="fas fa-envelope me-2"></i>Send Email
+                                </button>
+                            </div>
+                            <div class="col-md-3 col-6 mb-3">
+                                <button class="btn btn-outline-light w-100" onclick="showSection('crypto')">
+                                    <i class="fab fa-bitcoin me-2"></i>Update Addresses
+                                </button>
+                            </div>
+                            <div class="col-md-3 col-6 mb-3">
+                                <button class="btn btn-outline-light w-100" onclick="refreshDashboard()">
+                                    <i class="fas fa-sync-alt me-2"></i>Refresh
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="glass-card p-4">
+                        <h5 class="mb-3 gold-gradient">Recent Signups</h5>
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                            <table class="table table-dark table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Date</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentSignups">
+                                    <tr><td colspan="3" class="text-center">No recent signups</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="glass-card p-4">
+                        <h5 class="mb-3 gold-gradient">Recent Transactions</h5>
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                            <table class="table table-dark table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>User</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentAdminTransactions">
+                                    <tr><td colspan="4" class="text-center">No recent transactions</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Section -->
+        <div id="usersSection" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="gold-gradient">User Management</h3>
+                <button class="btn btn-outline-light" onclick="showSection('dashboard')">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </button>
+            </div>
+            
+            <div class="glass-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="gold-gradient mb-0">All Users</h5>
+                    <button class="btn btn-gold btn-sm" onclick="addNewUser()">
+                        <i class="fas fa-plus me-2"></i>Add User
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Balance</th>
+                                <th>Investments</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTable">
+                            <tr><td colspan="8" class="text-center">Loading users...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Crypto Addresses Section -->
+        <div id="cryptoSection" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="gold-gradient">Crypto Address Management</h3>
+                <button class="btn btn-outline-light" onclick="showSection('dashboard')">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </button>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="glass-card p-4 mb-4">
+                        <h5 class="mb-3 gold-gradient">Update Deposit Addresses</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Bitcoin (BTC) Address</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="adminBtcAddress" placeholder="Enter BTC address">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ethereum (ETH) Address</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="adminEthAddress" placeholder="Enter ETH address">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">USDT (TRC20) Address</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="adminUsdtAddress" placeholder="Enter USDT address">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">USDC Address</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="adminUsdcAddress" placeholder="Enter USDC address">
+                        </div>
+                        <button class="btn btn-gold w-100" onclick="saveCryptoAddresses()">Save Addresses</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="glass-card p-4">
+                        <h5 class="mb-3 gold-gradient">Current Addresses</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Bitcoin (BTC)</label>
+                            <div class="form-control bg-dark text-light border-secondary" style="font-family: monospace; font-size: 0.9rem;" id="currentBtcAddress">Loading...</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ethereum (ETH)</label>
+                            <div class="form-control bg-dark text-light border-secondary" style="font-family: monospace; font-size: 0.9rem;" id="currentEthAddress">Loading...</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">USDT (TRC20)</label>
+                            <div class="form-control bg-dark text-light border-secondary" style="font-family: monospace; font-size: 0.9rem;" id="currentUsdtAddress">Loading...</div>
+                        </div>
+                        <div class="mb-3">
+           
