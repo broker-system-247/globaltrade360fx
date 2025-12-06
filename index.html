@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobalTrade360 - Premium Crypto & Forex Investment Platform</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/color/96/000000/bitcoin--v1.png">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-gold: #FFD700;
+            --secondary-gold: #FFC107;
+            --dark-gold: #D4AF37;
+            --light-gold: #FFF8DC;
+            --dark-bg: #0A0E17;
+            --card-bg: #1A1F2E;
+            --success: #00C9A7;
+            --danger: #FF6B6B;
+            --info: #4ECDC4;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0A0E17 0%, #1A1F2E 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .gold-gradient {
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gold-bg-gradient {
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+        }
+        
+        .nav-glass {
+            background: rgba(10, 14, 23, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .glass-card {
+            background: rgba(26, 31, 46, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-gold);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.1);
+        }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+        }
+        
+        .btn-outline-gold {
+            border: 2px solid var(--primary-gold);
+            color: var(--primary-gold);
+            background: transparent;
+            padding: 10px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-gold:hover {
+            background: var(--primary-gold);
+            color: #000;
+        }
+        
+        .hero-section {
+            min-height: 100vh;
+            padding-top: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .investment-plan {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .investment-plan.featured::after {
+            content: 'FEATURED';
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: var(--primary-gold);
+            color: #000;
+            padding: 5px 30px;
+            transform: rotate(45deg);
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        
+        .trust-badge {
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+        
+        .trust-badge:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 50px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            border-radius: 2px;
+        }
+        
+        .floating-shape {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .nav-link {
+            position: relative;
+            color: #fff !important;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-gold) !important;
+        }
+        
+        .nav-link.active {
+            color: var(--primary-gold) !important;
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            border-radius: 5px;
+        }
+        
+        .live-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            animation: slideInRight 0.5s ease;
+            max-width: 350px;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .profit-badge {
+            background: linear-gradient(135deg, var(--success), #00ffaa);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 201, 167, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 201, 167, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 201, 167, 0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Shapes -->
+    <div class="floating-shape" style="top: 10%; left: 5%;"></div>
+    <div class="floating-shape" style="bottom: 10%; right: 5%; width: 200px; height: 200px;"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark nav-glass fixed-top py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <i class="fas fa-crown me-2" style="color: var(--primary-gold); font-size: 1.5rem;"></i>
+                <span class="fw-bold fs-4 gold-gradient">GlobalTrade360</span>
+                <span class="badge gold-bg-gradient ms-2" style="color: #000;">PRO</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#markets">Markets</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#invest">Invest</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#ai-trade">AI Trade</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#testimonials">Success</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-gold me-2" onclick="showLoginModal()">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                        <button class="btn btn-gold" onclick="showRegisterModal()">
+                            <i class="fas fa-user-plus me-2"></i>Register
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Live Notifications -->
+    <div id="liveNotifications"></div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <span class="gold-gradient">Premium Crypto & Forex</span> Investment Platform
+                    </h1>
+                    <p class="lead mb-4">Join thousands of successful investors using our AI-powered trading system. Automated profits, secure investments, and 24/7 professional support.</p>
+                    <div class="d-flex flex-wrap gap-3 mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-shield-alt text-success me-2"></i>
+                            <span>Licensed & Regulated</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-bolt text-warning me-2"></i>
+                            <span>Instant Withdrawals</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-robot text-info me-2"></i>
+                            <span>AI Trading Assistant</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-gold btn-lg me-3" onclick="showRegisterModal()">
+                        <i class="fas fa-rocket me-2"></i>Start Investing Now
+                    </button>
+                    <button class="btn btn-outline-gold btn-lg" onclick="scrollToInvest()">
+                        <i class="fas fa-chart-line me-2"></i>View Plans
+                    </button>
+                </div>
+                <div class="col-lg-6">
+                    <div class="glass-card p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="mb-0 gold-gradient">Live Market</h4>
+                            <span class="badge bg-danger">LIVE</span>
+                        </div>
+                        <div class="mb-4" style="height: 200px; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 20px;">
+                            <div class="row h-100 align-items-center">
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <div class="fs-1 gold-gradient">$63,842</div>
+                                        <div class="text-success">BTC/USD +2.4%</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <div class="fs-1 gold-gradient">$3,215</div>
+                                        <div class="text-success">ETH/USD +1.8%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="glass-card p-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <small class="text-muted">24h Volume</small>
+                                            <div class="fs-5 gold-gradient">$4.2B</div>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted">Active Traders</small>
+                                            <div class="fs-5 gold-gradient">50K+</div>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted">Success Rate</small>
+                                            <div class="fs-5 gold-gradient">89%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="glass-card stat-card">
+                        <div class="stat-number">$4.2B+</div>
+                        <p class="text-muted mb-0">Total Volume</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="glass-card stat-card">
+                        <div class="stat-number">50K+</div>
+                        <p class="text-muted mb-0">Active Traders</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="glass-card stat-card">
+                        <div class="stat-number">89%</div>
+                        <p class="text-muted mb-0">Success Rate</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="glass-card stat-card">
+                        <div class="stat-number">24/7</div>
+                        <p class="text-muted mb-0">Support</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investment Plans -->
+    <section id="invest" class="py-5">
+        <div class="container">
+            <h2 class="section-title fw-bold">Investment Plans</h2>
+            <p class="text-muted mb-5 text-center">Choose from our proven profitable investment strategies</p>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="glass-card p-4 h-100 investment-plan">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-star fa-3x gold-gradient mb-3"></i>
+                            <h4>Basic Plan</h4>
+                            <h2 class="gold-gradient">3.2% <small class="text-muted">Daily</small></h2>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Minimum: $500</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Maximum: $5,000</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Duration: 30 Days</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Capital Return: Yes</li>
+                        </ul>
+                        <button class="btn btn-gold w-100" onclick="showRegisterModal()">Invest Now</button>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="glass-card p-4 h-100 investment-plan featured" style="border: 2px solid var(--primary-gold);">
+                        <div class="text-center mb-4">
+                            <span class="badge gold-bg-gradient mb-2" style="color: #000;">MOST POPULAR</span>
+                            <i class="fas fa-crown fa-3x gold-gradient mb-3"></i>
+                            <h4>Pro Plan</h4>
+                            <h2 class="gold-gradient">4.8% <small class="text-muted">Daily</small></h2>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Minimum: $5,000</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Maximum: $50,000</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Duration: 60 Days</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Capital Return: Yes</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>AI Trading Signals</li>
+                        </ul>
+                        <button class="btn btn-gold w-100" onclick="showRegisterModal()">Invest Now</button>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="glass-card p-4 h-100 investment-plan">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-rocket fa-3x gold-gradient mb-3"></i>
+                            <h4>VIP Plan</h4>
+                            <h2 class="gold-gradient">7.5% <small class="text-muted">Daily</small></h2>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Minimum: $50,000</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Maximum: Unlimited</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Duration: 90 Days</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>24/7 Personal Manager</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Priority Withdrawals</li>
+                        </ul>
+                        <button class="btn btn-gold w-100" onclick="showRegisterModal()">Invest Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Trading Section -->
+    <section id="ai-trade" class="py-5">
+        <div class="container">
+            <div class="glass-card p-5">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <h2 class="fw-bold mb-4 gold-gradient">AI Trading Assistant</h2>
+                        <p class="mb-4">Our advanced AI analyzes market trends 24/7 to provide you with optimal trading signals. Get real-time buy/sell recommendations.</p>
+                        <div class="mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="feature-icon">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Market Analysis</h5>
+                                    <p class="text-muted mb-0">Real-time pattern recognition</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="feature-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Trade Signals</h5>
+                                    <p class="text-muted mb-0">Precise entry & exit points</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-gold" onclick="showRegisterModal()">
+                            <i class="fas fa-robot me-2"></i>Get AI Access
+                        </button>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="glass-card p-4">
+                            <h5 class="mb-3 gold-gradient">Today's AI Recommendations</h5>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>BTC/USD</span>
+                                    <span class="badge bg-success">STRONG BUY</span>
+                                </div>
+                                <div class="progress" style="height: 8px; background: rgba(255,255,255,0.1);">
+                                    <div class="progress-bar gold-bg-gradient" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>ETH/USD</span>
+                                    <span class="badge bg-warning">HOLD</span>
+                                </div>
+                                <div class="progress" style="height: 8px; background: rgba(255,255,255,0.1);">
+                                    <div class="progress-bar bg-warning" style="width: 60%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>EUR/USD</span>
+                                    <span class="badge bg-danger">SELL</span>
+                                </div>
+                                <div class="progress" style="height: 8px; background: rgba(255,255,255,0.1);">
+                                    <div class="progress-bar bg-danger" style="width: 40%"></div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <h6>AI Confidence Level: <span class="text-success">92%</span></h6>
+                                <p class="small text-muted">Based on 1,200+ data points and market indicators</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-5">
+        <div class="container">
+            <h2 class="section-title fw-bold">Client Success Stories</h2>
+            <p class="text-muted mb-5 text-center">See what our investors are saying</p>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="glass-card p-4 h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="rounded-circle me-3" width="50" alt="Client">
+                            <div>
+                                <h5 class="mb-0 gold-gradient">Michael Rodriguez</h5>
+                                <small class="text-muted">Professional Trader</small>
+                            </div>
+                        </div>
+                        <p class="mb-3">"Made $45,000 in my first month. The AI signals are incredibly accurate!"</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="glass-card p-4 h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="rounded-circle me-3" width="50" alt="Client">
+                            <div>
+                                <h5 class="mb-0 gold-gradient">Sarah Johnson</h5>
+                                <small class="text-muted">Business Owner</small>
+                            </div>
+                        </div>
+                        <p class="mb-3">"Withdrew $120,000 profit last week. Platform is reliable and withdrawals are instant."</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="glass-card p-4 h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://randomuser.me/api/portraits/men/65.jpg" class="rounded-circle me-3" width="50" alt="Client">
+                            <div>
+                                <h5 class="mb-0 gold-gradient">David Chen</h5>
+                                <small class="text-muted">Investor</small>
+                            </div>
+                        </div>
+                        <p class="mb-3">"The automated trading has generated consistent 4-7% daily returns. Highly recommend!"</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Badges -->
+    <section class="py-5">
+        <div class="container">
+            <div class="glass-card p-5">
+                <div class="row text-center">
+                    <div class="col-md-3 mb-4">
+                        <img src="https://img.icons8.com/color/96/000000/ssl-logo.png" class="trust-badge" alt="SSL Secure">
+                        <p class="mt-2">256-bit SSL Encryption</p>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <img src="https://img.icons8.com/color/96/000000/security-checked.png" class="trust-badge" alt="Licensed">
+                        <p class="mt-2">FCA Licensed</p>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <img src="https://img.icons8.com/color/96/000000/firewall.png" class="trust-badge" alt="Protected">
+                        <p class="mt-2">Funds Protected</p>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <img src="https://img.icons8.com/color/96/000000/cyber-security.png" class="trust-badge" alt="Insurance">
+                        <p class="mt-2">$1M Insurance</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-5">
+        <div class="container">
+            <h2 class="section-title fw-bold">Contact Us</h2>
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <div class="glass-card p-5">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-envelope fa-3x gold-gradient mb-3"></i>
+                            <h4>24/7 Support</h4>
+                            <p class="text-muted">We're here to help you succeed</p>
+                        </div>
+                        <div class="text-center">
+                            <p><i class="fas fa-envelope me-2 gold-gradient"></i>support@globaltrade360.com</p>
+                            <p><i class="fas fa-envelope me-2 gold-gradient"></i>stevenlogan362@gmail.com</p>
+                            <p class="small text-muted mt-3">Response time: Within 24 hours</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-5 border-top border-secondary">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold mb-3 gold-gradient">GlobalTrade360</h5>
+                    <p>Professional crypto and forex investment platform with AI-powered trading and automated profits.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-telegram fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-linkedin fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h6 class="fw-bold mb-3">Platform</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#home" class="text-light text-decoration-none">Home</a></li>
+                        <li class="mb-2"><a href="#invest" class="text-light text-decoration-none">Investment Plans</a></li>
+                        <li class="mb-2"><a href="#ai-trade" class="text-light text-decoration-none">AI Trading</a></li>
+                        <li class="mb-2"><a href="#testimonials" class="text-light text-decoration-none">Testimonials</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h6 class="fw-bold mb-3">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">Terms of Service</a></li>
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">Risk Disclosure</a></li>
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">AML Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h6 class="fw-bold mb-3">Contact</h6>
+                    <p><i class="fas fa-envelope me-2 gold-gradient"></i>support@globaltrade360.com</p>
+                    <p><i class="fas fa-envelope me-2 gold-gradient"></i>stevenlogan362@gmail.com</p>
+                    <p class="small text-muted">24/7 Support Available</p>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0">© 2024 GlobalTrade360. All rights reserved. Licensed & Regulated.</p>
+                <p class="small text-muted mt-2">CFDs are complex instruments and come with a high risk of losing money rapidly due to leverage. 78% of retail investor accounts lose money when trading CFDs.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title gold-gradient">Login to Your Account</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Username or Email</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="loginUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control bg-dark text-light border-secondary" id="loginPassword" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label">Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-gold w-100 mb-3">Login</button>
+                        <p class="text-center mt-3">
+                            Don't have an account? 
+                            <a href="#" class="text-warning" onclick="showRegisterModal()">Register</a>
+                        </p>
+                        <div class="text-center mt-3">
+                            <small class="text-muted">Admin login: username: admin, password: myhandwork2025</small>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title gold-gradient">Create New Account</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control bg-dark text-light border-secondary" id="firstName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control bg-dark text-light border-secondary" id="lastName" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control bg-dark text-light border-secondary" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control bg-dark text-light border-secondary" id="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control bg-dark text-light border-secondary" id="confirmPassword" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="acceptTerms" required>
+                            <label class="form-check-label">I agree to Terms & Conditions</label>
+                        </div>
+                        <button type="submit" class="btn btn-gold w-100">Create Account</button>
+                        <p class="text-center mt-3">
+                            Already have an account? 
+                            <a href="#" class="text-warning" onclick="showLoginModal()">Login</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap & jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+        // Global variables
+        let sessionId = localStorage.getItem('sessionId');
+        let currentUser = null;
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            startLiveNotifications();
+            
+            // Form submissions
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                loginUser();
+            });
+
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                registerUser();
+            });
+        });
+
+        // Check authentication
+        async function checkAuth() {
+            if (sessionId) {
+                try {
+                    const response = await fetch('/api/user', {
+                        headers: { 'x-session-id': sessionId }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            currentUser = data.user;
+                            // Redirect to appropriate page
+                            if (currentUser.isAdmin) {
+                                window.location.href = '/admin';
+                            } else {
+                                window.location.href = '/dashboard';
+                            }
+                        }
+                    }
+                } catch (error) {
+                    // Not logged in, stay on landing page
+                }
+            }
+        }
+
+        // Show login modal
+        function showLoginModal() {
+            const modal = new bootstrap.Modal(document.getElementById('loginModal'));
+            modal.show();
+        }
+
+        // Show register modal
+        function showRegisterModal() {
+            const modal = new bootstrap.Modal(document.getElementById('registerModal'));
+            modal.show();
+        }
+
+        // Login user
+        async function loginUser() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    sessionId = data.sessionId;
+                    localStorage.setItem('sessionId', sessionId);
+                    
+                    showNotification('success', 'Login successful!');
+                    
+                    // Redirect based on user type
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    } else if (data.user.isAdmin) {
+                        window.location.href = '/admin';
+                    } else {
+                        window.location.href = '/dashboard';
+                    }
+                } else {
+                    showNotification('error', data.error || 'Login failed');
+                }
+            } catch (error) {
+                showNotification('error', 'Network error. Please try again.');
+            }
+        }
+
+        // Register user
+        async function registerUser() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showNotification('error', 'Passwords do not match');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showNotification('error', 'Password must be at least 6 characters');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        firstName, 
+                        lastName, 
+                        username, 
+                        email, 
+                        password 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    sessionId = data.sessionId;
+                    localStorage.setItem('sessionId', sessionId);
+                    
+                    showNotification('success', 'Registration successful! Welcome bonus $1000 added.');
+                    
+                    // Redirect to dashboard
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1500);
+                } else {
+                    showNotification('error', data.error || 'Registration failed');
+                }
+            } catch (error) {
+                showNotification('error', 'Network error. Please try again.');
+            }
+        }
+
+        // Live notifications
+        async function startLiveNotifications() {
+            // Show initial notification
+            setTimeout(() => {
+                showLiveNotification("Michael K. just made $5,240 profit from Bitcoin trading!");
+            }, 3000);
+
+            // Schedule random notifications
+            setInterval(async () => {
+                try {
+                    const response = await fetch('/api/live-notifications');
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        showLiveNotification(data.notification);
+                    }
+                } catch (error) {
+                    // Fallback notifications
+                    const notifications = [
+                        "Sarah J. successfully withdrew $12,500 to her bank account!",
+                        "David L. earned $3,200 profit from Pro Plan investment!",
+                        "New user registered with $5,000 initial deposit!",
+                        "VIP member achieved 7.8% daily return on investment!",
+                        "Instant withdrawal processed for $8,750!"
+                    ];
+                    const randomNotif = notifications[Math.floor(Math.random() * notifications.length)];
+                    showLiveNotification(randomNotif);
+                }
+            }, 15000);
+        }
+
+        // Show live notification
+        function showLiveNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'glass-card p-3 live-notification';
+            notification.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <div class="profit-badge me-3">
+                        <i class="fas fa-bolt me-1"></i> LIVE
+                    </div>
+                    <div>
+                        <p class="mb-0 small">${message}</p>
+                        <small class="text-muted">Just now</small>
+                    </div>
+                    <button class="btn-close btn-close-white ms-3" onclick="this.parentElement.parentElement.remove()"></button>
+                </div>
+            `;
+            
+            document.getElementById('liveNotifications').appendChild(notification);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Utility functions
+        function showNotification(type, message) {
+            const alertClass = type === 'success' ? 'alert-success' : 
+                              type === 'error' ? 'alert-danger' : 'alert-info';
+            
+            const notification = document.createElement('div');
+            notification.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+            notification.style.cssText = 'top: 80px; right: 20px; z-index: 1050; max-width: 300px;';
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+
+        function scrollToInvest() {
+            document.getElementById('invest').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
